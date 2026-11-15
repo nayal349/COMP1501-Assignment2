@@ -322,6 +322,80 @@ public class ToyStoreMenu {
     }
 
     /**
+     * Removes a toy from the inventory using its serial number.
+     */
+    public void removeToy() {
+
+        String serialNumber;
+
+        do {
+
+            System.out.print("\nEnter Serial Number: ");
+            serialNumber = input.next();
+
+            if (!controller.isValidSerialNumber(serialNumber)) {
+
+                System.out.println(
+                        "Invalid Serial Number. Serial Number must contain 10 digits.");
+            }
+
+        } while (!controller.isValidSerialNumber(serialNumber));
+
+        Toy toy = controller.searchBySerialNumber(serialNumber);
+
+        if (toy == null) {
+
+            System.out.println(
+                    "\nNo toy was found with that serial number.");
+
+            return;
+        }
+
+        System.out.println("\nToy Found:\n");
+        System.out.println(toy);
+
+        int option = 0;
+
+        while (option != 1 && option != 2) {
+
+            System.out.println("\n(1) Remove Toy");
+            System.out.println("(2) Cancel");
+
+            System.out.print("\nEnter Option: ");
+
+            if (input.hasNextInt()) {
+
+                option = input.nextInt();
+
+            } else {
+
+                input.next();
+                System.out.println("\nInvalid option.");
+            }
+
+            if (option != 1 && option != 2) {
+
+                System.out.println(
+                        "\nInvalid option. Please enter 1 or 2.");
+            }
+        }
+
+        if (option == 1) {
+
+            if (controller.removeToy(toy)) {
+
+                System.out.println(
+                        "\nToy removed successfully.");
+
+            } else {
+
+                System.out.println(
+                        "\nUnable to remove the toy.");
+            }
+        }
+    }
+
+    /**
      * Displays the search menu and handles the user's
      * search option.
      */
@@ -380,12 +454,13 @@ public class ToyStoreMenu {
                     break;
 
                 case 3:
-                    System.out.println("Remove Toy");
+                    removeToy();
                     break;
 
                 case 4:
                     controller.saveInventory();
-                    System.out.println("Thank you for visiting Toy Store Company!");
+                    System.out.println(
+                            "Thank you for visiting Toy Store Company!");
                     System.out.println("Goodbye!");
                     break;
 
