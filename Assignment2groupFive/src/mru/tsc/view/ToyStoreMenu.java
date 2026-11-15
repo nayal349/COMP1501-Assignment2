@@ -11,6 +11,7 @@ import mru.tsc.controller.ToyStoreController;
 public class ToyStoreMenu {
 
     private Scanner input;
+    private ToyStoreController controller;
 
     /**
      * Creates a MainMenu object.
@@ -18,6 +19,7 @@ public class ToyStoreMenu {
      */
     public ToyStoreMenu(ToyStoreController t) {
         input = new Scanner(System.in);
+        controller = t;
     }
 
     /**
