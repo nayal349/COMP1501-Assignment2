@@ -324,6 +324,12 @@ public class ToyStoreMenu {
             System.out.println(
                     "\nSorry, this toy is currently out of stock.");
         }
+         input.nextLine();
+
+    System.out.print(
+            "Press Enter to Continue...");
+
+    input.nextLine();
     }
 
     /**
