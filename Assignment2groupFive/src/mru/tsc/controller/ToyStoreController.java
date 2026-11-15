@@ -130,6 +130,20 @@ public class ToyStoreController {
             System.out.println(e.getMessage());
         }
     }
+    /**
+    Searches for a toy using its serial number.
+    *
+    *@param serialNumber the serial number to search for
+    *@return the matching Toy object, or null if not found
+    */
+    public Toy seachBySerialNumber(String serialNumber) {
+        for (Toy toy : toys) {
+            if (toy.getSerialNumber().equalsIgnoreCase(serialNumber)) {
+                return toy;
+            }
+        }
+        return null;
+    }
 
     /**
      * Returns the list of toys currently stored in the inventory.
