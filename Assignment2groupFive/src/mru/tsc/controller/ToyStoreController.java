@@ -168,7 +168,38 @@ public class ToyStoreController {
 
         return results;
     }
+
+    /**
+        *Searches for toys by type.
+        *
+        *@param type the toy type to search for
+        *@return an ArrayList containing matching toys
+        */
+    public ArrayList<Toy> searchByType(int type) {
         
+        ArrayList<Toy> results = new ArrayList<Toy>();
+
+        for (Toy toy : toys) {
+
+            if (type == 1 && toy instanceof Figure) {
+                results.add(toy);
+            }
+
+            else if (type == 2 && toy instanceof Animal) {
+                results.add(toy);
+            }
+
+            else if (type == 3 && toy instanceof Puzzle) {
+                results.add(toy);
+            }
+
+            else if(type ==4 && toy instanceof BoardGame) {
+                results.add(toy);
+            }
+        }
+
+        return results;
+    }
 
     /**
      * Returns the list of toys currently stored in the inventory.
