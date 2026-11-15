@@ -15,7 +15,8 @@ public class ToyStoreMenu {
 
     /**
      * Creates a MainMenu object.
-     * @param  t the controller used by the menu
+     *
+     * @param t the controller used by the menu
      */
     public ToyStoreMenu(ToyStoreController t) {
         input = new Scanner(System.in);
@@ -24,6 +25,7 @@ public class ToyStoreMenu {
 
     /**
      * Displays the main menu and gets the user's choice.
+     *
      * @return the option selected by the user
      */
     public int displayMainMenu() {
@@ -54,6 +56,7 @@ public class ToyStoreMenu {
 
     /**
      * Displays the search menu and gets the user's choice.
+     *
      * @return the search option selected by the user
      */
     public int displaySearchMenu() {
@@ -79,6 +82,42 @@ public class ToyStoreMenu {
     }
 
     /**
+     * Displays the search menu and handles the user's
+     * search option.
+     */
+    public void searchInventory() {
+
+        int option = 0;
+
+        while (option != 4) {
+
+            option = displaySearchMenu();
+
+            switch (option) {
+
+                case 1:
+                    System.out.println("Search by Serial Number");
+                    break;
+
+                case 2:
+                    System.out.println("Search by Toy Name");
+                    break;
+
+                case 3:
+                    System.out.println("Search by Type");
+                    break;
+
+                case 4:
+                    break;
+
+                default:
+                    System.out.println("Invalid option. Please enter 1-4.");
+                    break;
+            }
+        }
+    }
+
+    /**
      * Starts the Toy Store application and displays the main menu.
      */
     public void start() {
@@ -93,7 +132,7 @@ public class ToyStoreMenu {
             switch (option) {
 
                 case 1:
-                    System.out.println("Search Inventory and Purchase Toy");
+                    searchInventory();
                     break;
 
                 case 2:
@@ -116,6 +155,3 @@ public class ToyStoreMenu {
         }
     }
 }
-
-        
-    
