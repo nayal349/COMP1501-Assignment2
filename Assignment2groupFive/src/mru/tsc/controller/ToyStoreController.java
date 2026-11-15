@@ -137,13 +137,38 @@ public class ToyStoreController {
     *@return the matching Toy object, or null if not found
     */
     public Toy seachBySerialNumber(String serialNumber) {
+        
         for (Toy toy : toys) {
+            
             if (toy.getSerialNumber().equalsIgnoreCase(serialNumber)) {
+                
                 return toy;
             }
         }
+        
         return null;
     }
+
+    /** 
+    *Searches for toys containing the entered name.
+    *
+    *@param name the name or part of the name to search for
+    *@return an ArrayList containing matching toys
+    */
+    public ArrayList<Toy> searchByName(String name) {
+        
+        ArrayList<Toy> results = new ArrayList<Toy>();
+
+        for (Toy toy : toys) {
+
+            if (toy.getName().toLowerCase().contains(name.toLowerCase())) {
+                results.add(toy);
+            }
+        }
+
+        return results;
+    }
+        
 
     /**
      * Returns the list of toys currently stored in the inventory.
