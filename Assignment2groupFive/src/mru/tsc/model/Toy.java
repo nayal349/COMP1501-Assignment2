@@ -46,7 +46,7 @@ public abstract class Toy {
      * @param brand the brand of the toy
      * @param price the price of the toy
      * @param availableCount the quantity available in inventory
-     * @param apporpiateAge the recommended age for the toy
+     * @param apporpriateAge the recommended age for the toy
      */
   public Toy(String serialNumber, String name, String brand,
            double price, int availableCount, String appropriateAge) {
