@@ -1,60 +1,574 @@
-package mru.tsc.controller;
+package mru.tsc.view;
 
+import java.util.ArrayList;
+import java.util.Scanner;
+
+import mru.tsc.controller.ToyStoreController;
 import mru.tsc.model.*;
 import mru.tsc.exceptions.InvalidPriceException;
 import mru.tsc.exceptions.InvalidPlayersException;
 
-import java.util.ArrayList;
-import java.util.Scanner;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-
 /**
- * Manages the inventory for the Toy Store Company.
- * Loads toy records from a file and stores Figure, Animal,
- * Puzzle, and BoardGame objects in a single ArrayList.
+ * Displays the menus for the Toy Store Company application.
  */
-public class ToyStoreController {
+public class ToyStoreMenu {
+
+    private Scanner input;
+    private ToyStoreController controller;
 
     /**
-     * The list containing all toys in the inventory.
+     * Creates a MainMenu object.
+     *
+     * @param t the controller used by the menu
      */
-    private ArrayList<Toy> toys;
+    public ToyStoreMenu(ToyStoreController t) {
 
-    /**
-     * Constructs a ToyStoreController with an empty inventory.
-     */
-    public ToyStoreController() {
-        toys = new ArrayList<Toy>();
+        input = new Scanner(System.in);
+        controller = t;
     }
 
     /**
-     * Reads toy records from the toys.txt file and adds them
-     * to the inventory.
+     * Displays the main menu.
+     *
+     * @return the option selected by the user
      */
-    public void loadInventory() {
+    public int displayMainMenu() {
 
-        File file = new File("res/toys.txt");
+        int option = 0;
 
-        try (Scanner output = new Scanner(file)) {
+        System.out.println(
+                "\n*************************************");
 
-            while (output.hasNextLine()) {
+        System.out.println(
+                "     WELCOME TO TOY STORE COMPANY");
 
-                String[] line = output.nextLine().split(";");
+        System.out.println(
+                "***************************************");
 
-                if (line[0].charAt(0) == '0'
-                        || line[0].charAt(0) == '1') {
+        System.out.println(
+                "\nHow can we help you?\n");
 
-                    String serialNumber = line[0];
-                    String name = line[1];
-                    String brand = line[2];
-                    double price = Double.parseDouble(line[3]);
-                    int availableCount = Integer.parseInt(line[4]);
-                    String appropriateAge = line[5];
-                    String classification = line[6];
+        System.out.println(
+                "(1) Search Inventory and Purchase Toy");
 
-                    Figure figure = new Figure(
+        System.out.println(
+                "(2) Add New Toy");
+
+        System.out.println(
+                "(3) Remove Toy");
+
+        System.out.println(
+                "(4) Make a Gift Suggestion");
+
+        System.out.println(
+                "(5) Save & Exit");
+
+        System.out.print(
+                "\nEnter Option: ");
+
+        if (input.hasNextInt()) {
+
+            option = input.nextInt();
+
+        } else {
+
+            input.next();
+        }
+
+        return option;
+    }
+
+    /**
+     * Displays the search menu.
+     *
+     * @return the search option selected
+     */
+    public int displaySearchMenu() {
+
+        int option = 0;
+
+        System.out.println(
+                "\nFind Toys With:\n");
+
+        System.out.println(
+                "(1) Serial Number (SN)");
+
+        System.out.println(
+                "(2) Toy Name");
+
+        System.out.println(
+                "(3) Type");
+
+        System.out.println(
+                "(4) Back to Main Menu");
+
+        System.out.print(
+                "\nEnter Option: ");
+
+        if (input.hasNextInt()) {
+
+            option = input.nextInt();
+
+        } else {
+
+            input.next();
+        }
+
+        return option;
+    }
+
+    /**
+     * Displays the toy type menu.
+     *
+     * @return the selected toy type
+     */
+    public int displayTypeMenu() {
+
+        int type = 0;
+
+        System.out.println(
+                "\nToy Types:\n");
+
+        System.out.println(
+                "(1) Figure");
+
+        System.out.println(
+                "(2) Animal");
+
+        System.out.println(
+                "(3) Puzzle");
+
+        System.out.println(
+                "(4) Board Game");
+
+        System.out.print(
+                "\nEnter Type: ");
+
+        if (input.hasNextInt()) {
+
+            type = input.nextInt();
+
+        } else {
+
+            input.next();
+        }
+
+        return type;
+    }
+
+    /**
+     * Searches for a toy by serial number.
+     */
+    public void searchBySerialNumber() {
+
+        String serialNumber;
+
+        do {
+
+            System.out.print(
+                    "\nEnter Serial Number: ");
+
+            serialNumber =
+                    input.next();
+
+            if (!controller.isValidSerialNumber(
+                    serialNumber)) {
+
+                System.out.println(
+                        "Invalid Serial Number. "
+                        + "Serial Number must contain 10 digits.");
+            }
+
+        } while (!controller.isValidSerialNumber(
+                serialNumber));
+
+        Toy toy =
+                controller.searchBySerialNumber(
+                        serialNumber);
+
+        if (toy != null) {
+
+            System.out.println(
+                    "\nToy Found:\n");
+
+            System.out.println(toy);
+
+            purchaseSingleToy(toy);
+
+        } else {
+
+            System.out.println(
+                    "\nNo toy was found with that serial number.");
+        }
+    }
+
+    /**
+     * Searches for toys by name.
+     */
+    public void searchByName() {
+
+        input.nextLine();
+
+        System.out.print(
+                "\nEnter Toy Name: ");
+
+        String name =
+                input.nextLine();
+
+        ArrayList<Toy> results =
+                controller.searchByName(name);
+
+        if (results.size() > 0) {
+
+            displayResults(results);
+
+            selectToyToPurchase(results);
+
+        } else {
+
+            System.out.println(
+                    "\nNo toys were found with that name.");
+        }
+    }
+
+    /**
+     * Searches for toys by type.
+     */
+    public void searchByType() {
+
+        int type =
+                displayTypeMenu();
+
+        if (type < 1
+                || type > 4) {
+
+            System.out.println(
+                    "\nInvalid toy type.");
+
+            return;
+        }
+
+        ArrayList<Toy> results =
+                controller.searchByType(type);
+
+        if (results.size() > 0) {
+
+            displayResults(results);
+
+            selectToyToPurchase(results);
+
+        } else {
+
+            System.out.println(
+                    "\nNo toys were found with that type.");
+        }
+    }
+
+    /**
+     * Displays toys found from a search.
+     *
+     * @param results the toys found
+     */
+    public void displayResults(
+            ArrayList<Toy> results) {
+
+        System.out.println(
+                "\nFound "
+                + results.size()
+                + " toy(s):\n");
+
+        for (int i = 0;
+                i < results.size();
+                i++) {
+
+            System.out.println(
+                    "Toy " + (i + 1));
+
+            System.out.println(
+                    results.get(i));
+
+            System.out.println();
+        }
+    }
+
+    /**
+     * Lets the user select a toy to purchase.
+     *
+     * @param results search results
+     */
+    public void selectToyToPurchase(
+            ArrayList<Toy> results) {
+
+        int selection = -1;
+
+        while (selection < 0
+                || selection > results.size()) {
+
+            System.out.println(
+                    "Enter the toy number you would like to purchase.");
+
+            System.out.println(
+                    "Enter 0 to return to the search menu.");
+
+            System.out.print(
+                    "\nEnter Option: ");
+
+            if (input.hasNextInt()) {
+
+                selection =
+                        input.nextInt();
+
+            } else {
+
+                input.next();
+
+                System.out.println(
+                        "\nInvalid option.");
+
+                continue;
+            }
+
+            if (selection < 0
+                    || selection > results.size()) {
+
+                System.out.println(
+                        "\nInvalid option.");
+            }
+        }
+
+        if (selection == 0) {
+
+            return;
+        }
+
+        Toy toy =
+                results.get(
+                        selection - 1);
+
+        completePurchase(toy);
+    }
+
+    /**
+     * Allows a single toy to be purchased.
+     *
+     * @param toy the toy found
+     */
+    public void purchaseSingleToy(
+            Toy toy) {
+
+        int option = 0;
+
+        while (option != 1
+                && option != 2) {
+
+            System.out.println(
+                    "\n(1) Purchase Toy");
+
+            System.out.println(
+                    "(2) Back to Search Menu");
+
+            System.out.print(
+                    "\nEnter Option: ");
+
+            if (input.hasNextInt()) {
+
+                option =
+                        input.nextInt();
+
+            } else {
+
+                input.next();
+
+                System.out.println(
+                        "\nInvalid option.");
+            }
+
+            if (option != 1
+                    && option != 2) {
+
+                System.out.println(
+                        "\nInvalid option. "
+                        + "Please enter 1 or 2.");
+            }
+        }
+
+        if (option == 1) {
+
+            completePurchase(toy);
+        }
+    }
+
+    /**
+     * Completes a toy purchase.
+     *
+     * @param toy the toy selected
+     */
+    public void completePurchase(
+            Toy toy) {
+
+        if (controller.purchaseToy(toy)) {
+
+            System.out.println(
+                    "\nThe transaction was completed successfully.");
+
+            System.out.println(
+                    "Remaining Available Count: "
+                    + toy.getAvailableCount());
+
+        } else {
+
+            System.out.println(
+                    "\nSorry, this toy is currently out of stock.");
+        }
+    }
+
+    /**
+     * Adds a new toy to the inventory.
+     */
+    public void addNewToy() {
+
+        input.nextLine();
+
+        String serialNumber;
+
+        while (true) {
+
+            System.out.print(
+                    "\nEnter Serial Number: ");
+
+            serialNumber =
+                    input.nextLine().trim();
+
+            if (!controller.isValidSerialNumber(
+                    serialNumber)) {
+
+                System.out.println(
+                        "Invalid Serial Number. "
+                        + "Serial Number must contain 10 digits.");
+
+            } else if (controller.serialNumberExists(
+                    serialNumber)) {
+
+                System.out.println(
+                        "A toy with this Serial Number already exists.");
+
+            } else {
+
+                break;
+            }
+        }
+
+        System.out.print(
+                "Enter Toy Name: ");
+
+        String name =
+                input.nextLine();
+
+        System.out.print(
+                "Enter Toy Brand: ");
+
+        String brand =
+                input.nextLine();
+
+        double price;
+
+        while (true) {
+
+            System.out.print(
+                    "Enter Toy Price: ");
+
+            try {
+
+                price =
+                        Double.parseDouble(
+                                input.nextLine());
+
+                controller.validatePrice(
+                        price);
+
+                break;
+
+            } catch (NumberFormatException e) {
+
+                System.out.println(
+                        "Invalid price. "
+                        + "Please enter a number.");
+
+            } catch (InvalidPriceException e) {
+
+                System.out.println(
+                        e.getMessage());
+            }
+        }
+
+        int availableCount =
+                readNonNegativeInteger(
+                        "Enter Available Counts: ");
+
+        String appropriateAge;
+
+        while (true) {
+
+            System.out.print(
+                    "Enter Appropriate Age: ");
+
+            appropriateAge =
+                    input.nextLine().trim();
+
+            try {
+
+                int age =
+                        Integer.parseInt(
+                                appropriateAge);
+
+                if (age >= 0) {
+
+                    break;
+                }
+
+                System.out.println(
+                        "Age cannot be negative.");
+
+            } catch (NumberFormatException e) {
+
+                System.out.println(
+                        "Invalid age. "
+                        + "Please enter a number.");
+            }
+        }
+
+        char firstDigit =
+                serialNumber.charAt(0);
+
+        if (firstDigit == '0'
+                || firstDigit == '1') {
+
+            String classification;
+
+            while (true) {
+
+                System.out.print(
+                        "Enter Classification (A/D/H): ");
+
+                classification =
+                        input.nextLine()
+                        .trim()
+                        .toUpperCase();
+
+                if (classification.equals("A")
+                        || classification.equals("D")
+                        || classification.equals("H")) {
+
+                    break;
+                }
+
+                System.out.println(
+                        "Invalid classification. "
+                        + "Enter A, D, or H.");
+            }
+
+            Figure figure =
+                    new Figure(
                             serialNumber,
                             name,
                             brand,
@@ -63,21 +577,44 @@ public class ToyStoreController {
                             appropriateAge,
                             classification);
 
-                    toys.add(figure);
+            controller.addToy(
+                    figure);
 
-                } else if (line[0].charAt(0) == '2'
-                        || line[0].charAt(0) == '3') {
+        } else if (firstDigit == '2'
+                || firstDigit == '3') {
 
-                    String serialNumber = line[0];
-                    String name = line[1];
-                    String brand = line[2];
-                    double price = Double.parseDouble(line[3]);
-                    int availableCount = Integer.parseInt(line[4]);
-                    String appropriateAge = line[5];
-                    String material = line[6];
-                    String size = line[7];
+            System.out.print(
+                    "Enter Material: ");
 
-                    Animal animal = new Animal(
+            String material =
+                    input.nextLine();
+
+            String size;
+
+            while (true) {
+
+                System.out.print(
+                        "Enter Size (S/M/L): ");
+
+                size =
+                        input.nextLine()
+                        .trim()
+                        .toUpperCase();
+
+                if (size.equals("S")
+                        || size.equals("M")
+                        || size.equals("L")) {
+
+                    break;
+                }
+
+                System.out.println(
+                        "Invalid size. "
+                        + "Enter S, M, or L.");
+            }
+
+            Animal animal =
+                    new Animal(
                             serialNumber,
                             name,
                             brand,
@@ -87,21 +624,41 @@ public class ToyStoreController {
                             material,
                             size);
 
-                    toys.add(animal);
+            controller.addToy(
+                    animal);
 
-                } else if (line[0].charAt(0) == '4'
-                        || line[0].charAt(0) == '5'
-                        || line[0].charAt(0) == '6') {
+        } else if (firstDigit == '4'
+                || firstDigit == '5'
+                || firstDigit == '6') {
 
-                    String serialNumber = line[0];
-                    String name = line[1];
-                    String brand = line[2];
-                    double price = Double.parseDouble(line[3]);
-                    int availableCount = Integer.parseInt(line[4]);
-                    String appropriateAge = line[5];
-                    String puzzleType = line[6];
+            String puzzleType;
 
-                    Puzzle puzzle = new Puzzle(
+            while (true) {
+
+                System.out.print(
+                        "Enter Puzzle Type (M/C/L/T/R): ");
+
+                puzzleType =
+                        input.nextLine()
+                        .trim()
+                        .toUpperCase();
+
+                if (puzzleType.equals("M")
+                        || puzzleType.equals("C")
+                        || puzzleType.equals("L")
+                        || puzzleType.equals("T")
+                        || puzzleType.equals("R")) {
+
+                    break;
+                }
+
+                System.out.println(
+                        "Invalid puzzle type. "
+                        + "Enter M, C, L, T, or R.");
+            }
+
+            Puzzle puzzle =
+                    new Puzzle(
                             serialNumber,
                             name,
                             brand,
@@ -110,26 +667,48 @@ public class ToyStoreController {
                             appropriateAge,
                             puzzleType);
 
-                    toys.add(puzzle);
+            controller.addToy(
+                    puzzle);
 
-                } else if (line[0].charAt(0) == '7'
-                        || line[0].charAt(0) == '8'
-                        || line[0].charAt(0) == '9') {
+        } else {
 
-                    String serialNumber = line[0];
-                    String name = line[1];
-                    String brand = line[2];
-                    double price = Double.parseDouble(line[3]);
-                    int availableCount = Integer.parseInt(line[4]);
-                    String appropriateAge = line[5];
+            int minPlayers;
+            int maxPlayers;
 
-                    String[] players = line[6].split("-");
+            while (true) {
 
-                    int minPlayers = Integer.parseInt(players[0]);
-                    int maxPlayers = Integer.parseInt(players[1]);
-                    String designers = line[7];
+                minPlayers =
+                        readPositiveInteger(
+                                "Enter Minimum Number of Players: ");
 
-                    BoardGame boardGame = new BoardGame(
+                maxPlayers =
+                        readPositiveInteger(
+                                "Enter Maximum Number of Players: ");
+
+                try {
+
+                    controller.validatePlayers(
+                            minPlayers,
+                            maxPlayers);
+
+                    break;
+
+                } catch (InvalidPlayersException e) {
+
+                    System.out.println(
+                            e.getMessage());
+                }
+            }
+
+            System.out.print(
+                    "Enter Designer Names "
+                    + "(use ',' to separate names): ");
+
+            String designers =
+                    input.nextLine();
+
+            BoardGame boardGame =
+                    new BoardGame(
                             serialNumber,
                             name,
                             brand,
@@ -140,371 +719,515 @@ public class ToyStoreController {
                             maxPlayers,
                             designers);
 
-                    toys.add(boardGame);
+            controller.addToy(
+                    boardGame);
+        }
 
-                } else {
+        System.out.println(
+                "\nNew Toy Added!");
 
-                    System.out.println("Invalid Serial Number");
+        System.out.print(
+                "Press Enter to Continue...");
+
+        input.nextLine();
+    }
+
+    /**
+     * Reads an integer that is zero or greater.
+     *
+     * @param message message displayed to user
+     * @return valid integer
+     */
+    private int readNonNegativeInteger(
+            String message) {
+
+        while (true) {
+
+            System.out.print(
+                    message);
+
+            try {
+
+                int number =
+                        Integer.parseInt(
+                                input.nextLine());
+
+                if (number >= 0) {
+
+                    return number;
                 }
-            }
 
-        } catch (FileNotFoundException e) {
+                System.out.println(
+                        "Please enter 0 or greater.");
 
-            System.out.println(e.getMessage());
-        }
-    }
+            } catch (NumberFormatException e) {
 
-    /**
-     * Checks if a serial number contains exactly 10 digits.
-     *
-     * @param serialNumber the serial number to validate
-     * @return true if the serial number is valid, otherwise false
-     */
-    public boolean isValidSerialNumber(String serialNumber) {
-
-        if (serialNumber.length() != 10) {
-            return false;
-        }
-
-        for (int i = 0; i < serialNumber.length(); i++) {
-
-            if (!Character.isDigit(serialNumber.charAt(i))) {
-                return false;
+                System.out.println(
+                        "Invalid number.");
             }
         }
-
-        return true;
     }
 
     /**
-     * Checks whether a serial number already exists.
+     * Reads an integer greater than zero.
      *
-     * @param serialNumber the serial number to check
-     * @return true if the serial number already exists
+     * @param message message displayed to user
+     * @return valid positive integer
      */
-    public boolean serialNumberExists(String serialNumber) {
+    private int readPositiveInteger(
+            String message) {
 
-        return searchBySerialNumber(serialNumber) != null;
+        while (true) {
+
+            System.out.print(
+                    message);
+
+            try {
+
+                int number =
+                        Integer.parseInt(
+                                input.nextLine());
+
+                if (number > 0) {
+
+                    return number;
+                }
+
+                System.out.println(
+                        "Please enter a number greater than 0.");
+
+            } catch (NumberFormatException e) {
+
+                System.out.println(
+                        "Invalid number.");
+            }
+        }
     }
 
     /**
-     * Searches for a toy using its serial number.
-     *
-     * @param serialNumber the serial number to search for
-     * @return the matching Toy object, or null if not found
+     * Removes a toy using its serial number.
      */
-    public Toy searchBySerialNumber(String serialNumber) {
+    public void removeToy() {
 
-        for (Toy toy : toys) {
+        String serialNumber;
 
-            if (toy.getSerialNumber().equalsIgnoreCase(serialNumber)) {
-                return toy;
+        do {
+
+            System.out.print(
+                    "\nEnter Serial Number: ");
+
+            serialNumber =
+                    input.next();
+
+            if (!controller.isValidSerialNumber(
+                    serialNumber)) {
+
+                System.out.println(
+                        "Invalid Serial Number. "
+                        + "Serial Number must contain 10 digits.");
+            }
+
+        } while (!controller.isValidSerialNumber(
+                serialNumber));
+
+        Toy toy =
+                controller.searchBySerialNumber(
+                        serialNumber);
+
+        if (toy == null) {
+
+            System.out.println(
+                    "\nNo toy was found with that serial number.");
+
+            return;
+        }
+
+        System.out.println(
+                "\nToy Found:\n");
+
+        System.out.println(
+                toy);
+
+        int option = 0;
+
+        while (option != 1
+                && option != 2) {
+
+            System.out.println(
+                    "\n(1) Remove Toy");
+
+            System.out.println(
+                    "(2) Cancel");
+
+            System.out.print(
+                    "\nEnter Option: ");
+
+            if (input.hasNextInt()) {
+
+                option =
+                        input.nextInt();
+
+            } else {
+
+                input.next();
+
+                System.out.println(
+                        "\nInvalid option.");
+            }
+
+            if (option != 1
+                    && option != 2) {
+
+                System.out.println(
+                        "\nInvalid option. "
+                        + "Please enter 1 or 2.");
             }
         }
 
-        return null;
+        if (option == 1) {
+
+            if (controller.removeToy(
+                    toy)) {
+
+                System.out.println(
+                        "\nToy removed successfully.");
+
+            } else {
+
+                System.out.println(
+                        "\nUnable to remove the toy.");
+            }
+        }
     }
 
     /**
-     * Searches for toys containing the entered name.
-     *
-     * @param name the name or part of the name to search for
-     * @return an ArrayList containing matching toys
+     * Makes gift suggestions using optional age, type,
+     * and price range filters.
      */
-    public ArrayList<Toy> searchByName(String name) {
+    public void makeGiftSuggestion() {
 
-        ArrayList<Toy> results = new ArrayList<Toy>();
+        input.nextLine();
 
-        for (Toy toy : toys) {
+        System.out.println(
+                "\nGift Suggestion");
 
-            if (toy.getName().toLowerCase()
-                    .contains(name.toLowerCase())) {
+        System.out.println(
+                "Press Enter to leave a choice empty.\n");
 
-                results.add(toy);
+        int age = -1;
+
+        while (true) {
+
+            System.out.print(
+                    "Enter Recipient Age: ");
+
+            String ageText =
+                    input.nextLine().trim();
+
+            if (ageText.isEmpty()) {
+
+                break;
+            }
+
+            try {
+
+                age =
+                        Integer.parseInt(
+                                ageText);
+
+                if (age >= 0) {
+
+                    break;
+                }
+
+                System.out.println(
+                        "Age cannot be negative.");
+
+            } catch (NumberFormatException e) {
+
+                System.out.println(
+                        "Invalid age.");
             }
         }
 
-        return results;
-    }
+        int type = 0;
 
-    /**
-     * Searches for toys by type.
-     *
-     * @param type the toy type to search for
-     * @return an ArrayList containing matching toys
-     */
-    public ArrayList<Toy> searchByType(int type) {
+        while (true) {
 
-        ArrayList<Toy> results = new ArrayList<Toy>();
+            System.out.println(
+                    "\nToy Type:");
 
-        for (Toy toy : toys) {
+            System.out.println(
+                    "(1) Figure");
 
-            if (type == 1 && toy instanceof Figure) {
+            System.out.println(
+                    "(2) Animal");
 
-                results.add(toy);
+            System.out.println(
+                    "(3) Puzzle");
 
-            } else if (type == 2 && toy instanceof Animal) {
+            System.out.println(
+                    "(4) Board Game");
 
-                results.add(toy);
+            System.out.println(
+                    "Press Enter for Any Type");
 
-            } else if (type == 3 && toy instanceof Puzzle) {
+            System.out.print(
+                    "Enter Type: ");
 
-                results.add(toy);
+            String typeText =
+                    input.nextLine().trim();
 
-            } else if (type == 4 && toy instanceof BoardGame) {
+            if (typeText.isEmpty()) {
 
-                results.add(toy);
+                type = 0;
+
+                break;
+            }
+
+            try {
+
+                type =
+                        Integer.parseInt(
+                                typeText);
+
+                if (type >= 1
+                        && type <= 4) {
+
+                    break;
+                }
+
+                System.out.println(
+                        "Invalid type. "
+                        + "Please enter 1-4.");
+
+            } catch (NumberFormatException e) {
+
+                System.out.println(
+                        "Invalid type. "
+                        + "Please enter 1-4.");
             }
         }
 
-        return results;
-    }
+        double minPrice = -1;
+        double maxPrice = -1;
 
-    /**
-     * Searches for toys that match the gift suggestion choices.
-     * A value of -1 means that filter was left empty.
-     * A type of 0 means any toy type.
-     *
-     * @param age the recipient's age, or -1 for any age
-     * @param type the toy type, or 0 for any type
-     * @param minPrice the minimum price, or -1 for any price
-     * @param maxPrice the maximum price, or -1 for any price
-     * @return an ArrayList containing matching gift suggestions
-     */
-    public ArrayList<Toy> suggestGift(
-            int age,
-            int type,
-            double minPrice,
-            double maxPrice) {
+        while (true) {
 
-        ArrayList<Toy> results = new ArrayList<Toy>();
+            System.out.print(
+                    "\nEnter Minimum Price "
+                    + "(Press Enter to skip price range): ");
 
-        for (Toy toy : toys) {
+            String minText =
+                    input.nextLine().trim();
 
-            boolean matchesAge = true;
-            boolean matchesType = true;
-            boolean matchesPrice = true;
+            if (minText.isEmpty()) {
 
-            if (age != -1) {
+                break;
+            }
 
-                String ageText = toy.getAppropriateAge()
-                        .replace("+", "")
-                        .trim();
+            try {
+
+                minPrice =
+                        Double.parseDouble(
+                                minText);
+
+                if (minPrice < 0) {
+
+                    System.out.println(
+                            "Price cannot be negative.");
+
+                    minPrice = -1;
+
+                    continue;
+                }
+
+            } catch (NumberFormatException e) {
+
+                System.out.println(
+                        "Invalid price.");
+
+                minPrice = -1;
+
+                continue;
+            }
+
+            while (true) {
+
+                System.out.print(
+                        "Enter Maximum Price: ");
+
+                String maxText =
+                        input.nextLine().trim();
 
                 try {
 
-                    int toyAge = Integer.parseInt(ageText);
+                    maxPrice =
+                            Double.parseDouble(
+                                    maxText);
 
-                    matchesAge = age >= toyAge;
+                    if (maxPrice < minPrice) {
+
+                        System.out.println(
+                                "Maximum price cannot be less than minimum price.");
+
+                        continue;
+                    }
+
+                    break;
 
                 } catch (NumberFormatException e) {
 
-                    matchesAge = false;
+                    System.out.println(
+                            "Invalid price.");
                 }
             }
 
-            if (type != 0) {
-
-                matchesType =
-                        (type == 1 && toy instanceof Figure)
-                        || (type == 2 && toy instanceof Animal)
-                        || (type == 3 && toy instanceof Puzzle)
-                        || (type == 4 && toy instanceof BoardGame);
-            }
-
-            if (minPrice != -1
-                    && toy.getPrice() < minPrice) {
-
-                matchesPrice = false;
-            }
-
-            if (maxPrice != -1
-                    && toy.getPrice() > maxPrice) {
-
-                matchesPrice = false;
-            }
-
-            if (matchesAge
-                    && matchesType
-                    && matchesPrice) {
-
-                results.add(toy);
-            }
+            break;
         }
 
-        return results;
-    }
-
-    /**
-     * Purchases a toy if it is available.
-     *
-     * @param toy the toy being purchased
-     * @return true if the purchase was successful
-     */
-    public boolean purchaseToy(Toy toy) {
-
-        if (toy.getAvailableCount() > 0) {
-
-            toy.setAvailableCount(
-                    toy.getAvailableCount() - 1);
-
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * Adds a new toy to the inventory.
-     *
-     * @param toy the toy to add
-     */
-    public void addToy(Toy toy) {
-
-        toys.add(toy);
-    }
-
-    /**
-     * Removes a toy from the inventory.
-     *
-     * @param toy the toy to remove
-     * @return true if the toy was removed
-     */
-    public boolean removeToy(Toy toy) {
-
-        return toys.remove(toy);
-    }
-
-    /**
-     * Checks that the price is not negative.
-     *
-     * @param price the price to validate
-     * @throws InvalidPriceException if the price is negative
-     */
-    public void validatePrice(double price)
-            throws InvalidPriceException {
-
-        if (price < 0) {
-
-            throw new InvalidPriceException(
-                    "Price cannot be negative.");
-        }
-    }
-
-    /**
-     * Checks that minimum players is not greater
-     * than maximum players.
-     *
-     * @param minPlayers minimum number of players
-     * @param maxPlayers maximum number of players
-     * @throws InvalidPlayersException if minimum is greater
-     */
-    public void validatePlayers(
-            int minPlayers,
-            int maxPlayers)
-            throws InvalidPlayersException {
-
-        if (minPlayers > maxPlayers) {
-
-            throw new InvalidPlayersException(
-                    "Minimum players cannot be greater than maximum players.");
-        }
-    }
-
-    /**
-     * Saves all toys in the inventory back to toys.txt.
-     */
-    public void saveInventory() {
-
-        File file = new File("res/toys.txt");
-
-        try (PrintWriter writer = new PrintWriter(file)) {
-
-            for (Toy toy : toys) {
-
-                if (toy instanceof Figure) {
-
-                    Figure figure = (Figure) toy;
-
-                    writer.println(
-                            figure.getSerialNumber() + ";"
-                            + figure.getName() + ";"
-                            + figure.getBrand() + ";"
-                            + String.format(
-                                    "%.2f",
-                                    figure.getPrice()) + ";"
-                            + figure.getAvailableCount() + ";"
-                            + figure.getAppropriateAge() + ";"
-                            + figure.getClassification());
-
-                } else if (toy instanceof Animal) {
-
-                    Animal animal = (Animal) toy;
-
-                    writer.println(
-                            animal.getSerialNumber() + ";"
-                            + animal.getName() + ";"
-                            + animal.getBrand() + ";"
-                            + String.format(
-                                    "%.2f",
-                                    animal.getPrice()) + ";"
-                            + animal.getAvailableCount() + ";"
-                            + animal.getAppropriateAge() + ";"
-                            + animal.getMaterial() + ";"
-                            + animal.getSize());
-
-                } else if (toy instanceof Puzzle) {
-
-                    Puzzle puzzle = (Puzzle) toy;
-
-                    writer.println(
-                            puzzle.getSerialNumber() + ";"
-                            + puzzle.getName() + ";"
-                            + puzzle.getBrand() + ";"
-                            + String.format(
-                                    "%.2f",
-                                    puzzle.getPrice()) + ";"
-                            + puzzle.getAvailableCount() + ";"
-                            + puzzle.getAppropriateAge() + ";"
-                            + puzzle.getPuzzleType());
-
-                } else if (toy instanceof BoardGame) {
-
-                    BoardGame boardGame =
-                            (BoardGame) toy;
-
-                    writer.println(
-                            boardGame.getSerialNumber() + ";"
-                            + boardGame.getName() + ";"
-                            + boardGame.getBrand() + ";"
-                            + String.format(
-                                    "%.2f",
-                                    boardGame.getPrice()) + ";"
-                            + boardGame.getAvailableCount() + ";"
-                            + boardGame.getAppropriateAge() + ";"
-                            + boardGame.getMinPlayers() + "-"
-                            + boardGame.getMaxPlayers() + ";"
-                            + boardGame.getDesigners());
-                }
-            }
+        if (age == -1
+                && type == 0
+                && minPrice == -1) {
 
             System.out.println(
-                    "\nInventory saved successfully.");
+                    "\nPlease enter at least one "
+                    + "gift suggestion choice.");
 
-        } catch (FileNotFoundException e) {
+            return;
+        }
+
+        ArrayList<Toy> results =
+                controller.suggestGift(
+                        age,
+                        type,
+                        minPrice,
+                        maxPrice);
+
+        if (results.size() > 0) {
 
             System.out.println(
-                    "Unable to save inventory.");
+                    "\nGift Suggestions:");
+
+            displayResults(
+                    results);
+
+            selectToyToPurchase(
+                    results);
+
+        } else {
+
+            System.out.println(
+                    "\nNo gift suggestions matched your choices.");
         }
     }
 
     /**
-     * Returns the list of toys currently stored.
-     *
-     * @return an ArrayList containing Toy objects
+     * Displays and handles the search menu.
      */
-    public ArrayList<Toy> getToys() {
+    public void searchInventory() {
 
-        return toys;
+        int option = 0;
+
+        while (option != 4) {
+
+            option =
+                    displaySearchMenu();
+
+            switch (option) {
+
+                case 1:
+
+                    searchBySerialNumber();
+
+                    break;
+
+                case 2:
+
+                    searchByName();
+
+                    break;
+
+                case 3:
+
+                    searchByType();
+
+                    break;
+
+                case 4:
+
+                    break;
+
+                default:
+
+                    System.out.println(
+                            "Invalid option. "
+                            + "Please enter 1-4.");
+
+                    break;
+            }
+        }
+    }
+
+    /**
+     * Starts the Toy Store application.
+     */
+    public void start() {
+
+        int option = 0;
+
+        while (option != 5) {
+
+            option =
+                    displayMainMenu();
+
+            switch (option) {
+
+                case 1:
+
+                    searchInventory();
+
+                    break;
+
+                case 2:
+
+                    addNewToy();
+
+                    break;
+
+                case 3:
+
+                    removeToy();
+
+                    break;
+
+                case 4:
+
+                    makeGiftSuggestion();
+
+                    break;
+
+                case 5:
+
+                    controller.saveInventory();
+
+                    System.out.println(
+                            "Thank you for visiting "
+                            + "Toy Store Company!");
+
+                    System.out.println(
+                            "Goodbye!");
+
+                    break;
+
+                default:
+
+                    System.out.println(
+                            "Invalid option. "
+                            + "Please enter 1-5.");
+
+                    break;
+            }
+        }
     }
 }
