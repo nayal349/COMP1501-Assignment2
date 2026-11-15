@@ -115,9 +115,19 @@ public class ToyStoreMenu {
      */
     public void searchBySerialNumber() {
 
-        System.out.print("\nEnter Serial Number: ");
+        String serialNumber;
 
-        String serialNumber = input.next();
+        do {
+
+            System.out.print("\nEnter Serial Number: ");
+            serialNumber = input.next();
+
+            if (!controller.isValidSerialNumber(serialNumber)) {
+                System.out.println(
+                        "Invalid Serial Number. Serial Number must contain 10 digits.");
+            }
+
+        } while (!controller.isValidSerialNumber(serialNumber));
 
         Toy toy = controller.searchBySerialNumber(serialNumber);
 
@@ -126,9 +136,12 @@ public class ToyStoreMenu {
             System.out.println("\nToy Found:\n");
             System.out.println(toy);
 
+            purchaseSingleToy(toy);
+
         } else {
 
-            System.out.println("\nNo toy was found with that serial number.");
+            System.out.println(
+                    "\nNo toy was found with that serial number.");
         }
     }
 
@@ -137,7 +150,6 @@ public class ToyStoreMenu {
      */
     public void searchByName() {
 
-        // Clear the remaining new line from the previous input.
         input.nextLine();
 
         System.out.print("\nEnter Toy Name: ");
@@ -148,18 +160,13 @@ public class ToyStoreMenu {
 
         if (results.size() > 0) {
 
-            System.out.println("\nFound " + results.size() + " toy(s):\n");
-
-            for (int i = 0; i < results.size(); i++) {
-
-                System.out.println("Toy " + (i + 1));
-                System.out.println(results.get(i));
-                System.out.println();
-            }
+            displayResults(results);
+            selectToyToPurchase(results);
 
         } else {
 
-            System.out.println("\nNo toys were found with that name.");
+            System.out.println(
+                    "\nNo toys were found with that name.");
         }
     }
 
@@ -180,18 +187,137 @@ public class ToyStoreMenu {
 
         if (results.size() > 0) {
 
-            System.out.println("\nFound " + results.size() + " toy(s):\n");
-
-            for (int i = 0; i < results.size(); i++) {
-
-                System.out.println("Toy " + (i + 1));
-                System.out.println(results.get(i));
-                System.out.println();
-            }
+            displayResults(results);
+            selectToyToPurchase(results);
 
         } else {
 
-            System.out.println("\nNo toys were found with that type.");
+            System.out.println(
+                    "\nNo toys were found with that type.");
+        }
+    }
+
+    /**
+     * Displays all toys found from a search.
+     *
+     * @param results the list of toys found
+     */
+    public void displayResults(ArrayList<Toy> results) {
+
+        System.out.println(
+                "\nFound " + results.size() + " toy(s):\n");
+
+        for (int i = 0; i < results.size(); i++) {
+
+            System.out.println("Toy " + (i + 1));
+            System.out.println(results.get(i));
+            System.out.println();
+        }
+    }
+
+    /**
+     * Lets the user choose one toy from the search results.
+     *
+     * @param results the list of toys found
+     */
+    public void selectToyToPurchase(ArrayList<Toy> results) {
+
+        int selection = -1;
+
+        while (selection < 0 || selection > results.size()) {
+
+            System.out.println(
+                    "Enter the toy number you would like to purchase.");
+            System.out.println(
+                    "Enter 0 to return to the search menu.");
+
+            System.out.print("\nEnter Option: ");
+
+            if (input.hasNextInt()) {
+
+                selection = input.nextInt();
+
+            } else {
+
+                input.next();
+                System.out.println("\nInvalid option.");
+                continue;
+            }
+
+            if (selection < 0 || selection > results.size()) {
+
+                System.out.println("\nInvalid option.");
+            }
+        }
+
+        if (selection == 0) {
+            return;
+        }
+
+        Toy toy = results.get(selection - 1);
+
+        completePurchase(toy);
+    }
+
+    /**
+     * Allows the user to purchase a toy found by serial number.
+     *
+     * @param toy the toy found
+     */
+    public void purchaseSingleToy(Toy toy) {
+
+        int option = 0;
+
+        while (option != 1 && option != 2) {
+
+            System.out.println("\n(1) Purchase Toy");
+            System.out.println("(2) Back to Search Menu");
+
+            System.out.print("\nEnter Option: ");
+
+            if (input.hasNextInt()) {
+
+                option = input.nextInt();
+
+            } else {
+
+                input.next();
+                System.out.println("\nInvalid option.");
+            }
+
+            if (option != 1 && option != 2) {
+
+                System.out.println(
+                        "\nInvalid option. Please enter 1 or 2.");
+            }
+        }
+
+        if (option == 1) {
+
+            completePurchase(toy);
+        }
+    }
+
+    /**
+     * Completes the purchase of a selected toy.
+     *
+     * @param toy the toy selected for purchase
+     */
+    public void completePurchase(Toy toy) {
+
+        if (controller.purchaseToy(toy)) {
+
+            System.out.println(
+                    "\nThe transaction was completed successfully.");
+
+            System.out.println(
+                    "Remaining Available Count: "
+                    + toy.getAvailableCount());
+
+        } else {
+
+            System.out.println(
+                    "\nSorry, this toy is currently out of stock.");
         }
     }
 
@@ -225,7 +351,8 @@ public class ToyStoreMenu {
                     break;
 
                 default:
-                    System.out.println("Invalid option. Please enter 1-4.");
+                    System.out.println(
+                            "Invalid option. Please enter 1-4.");
                     break;
             }
         }
@@ -238,7 +365,6 @@ public class ToyStoreMenu {
 
         int option = 0;
 
-        // Keep displaying the menu until the user chooses to exit.
         while (option != 4) {
 
             option = displayMainMenu();
@@ -258,12 +384,14 @@ public class ToyStoreMenu {
                     break;
 
                 case 4:
+                    controller.saveInventory();
                     System.out.println("Thank you for visiting Toy Store Company!");
                     System.out.println("Goodbye!");
                     break;
 
                 default:
-                    System.out.println("Invalid option. Please enter 1-4.");
+                    System.out.println(
+                            "Invalid option. Please enter 1-4.");
                     break;
             }
         }
