@@ -246,6 +246,17 @@ public class ToyStoreController {
     }
 
     /**
+     * Removes a toy from the inventory.
+     *
+     * @param toy the toy to remove
+     * @return true if the toy was removed, otherwise false
+     */
+    public boolean removeToy(Toy toy) {
+
+        return toys.remove(toy);
+    }
+
+    /**
      * Saves all toys in the inventory back to toys.txt.
      */
     public void saveInventory() {
