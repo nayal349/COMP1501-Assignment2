@@ -393,11 +393,33 @@ public class ToyStoreMenu {
                 readNonNegativeInteger(
                         "Enter Available Counts: ");
 
-        System.out.print(
-                "Enter Appropriate Age: ");
+        String appropriateAge;
 
-        String appropriateAge =
-                input.nextLine();
+        while (true) {
+
+            System.out.print(
+                    "Enter Appropriate Age: ");
+
+            appropriateAge =
+                    input.nextLine().trim();
+
+            try {
+
+                int age = Integer.parseInt(appropriateAge);
+
+                if (age >= 0) {
+                    break;
+                }
+
+                System.out.println(
+                        "Age cannot be negative.");
+
+            } catch (NumberFormatException e) {
+
+                System.out.println(
+                        "Invalid age. Please enter a number.");
+            }
+        }
 
         char firstDigit =
                 serialNumber.charAt(0);
