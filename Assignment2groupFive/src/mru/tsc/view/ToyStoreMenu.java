@@ -15,7 +15,7 @@ public class ToyStoreMenu {
 
     /**
      * Creates a MainMenu object.
-     * @param 
+     * @param  t the controller used by the menu
      */
     public ToyStoreMenu(ToyStoreController t) {
         input = new Scanner(System.in);
