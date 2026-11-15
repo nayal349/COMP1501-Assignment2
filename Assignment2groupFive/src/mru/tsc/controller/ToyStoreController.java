@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 
 /**
  * Manages the inventory for the Toy Store Company.
@@ -242,6 +243,82 @@ public class ToyStoreController {
         }
 
         return false;
+    }
+
+    /**
+     * Saves all toys in the inventory back to toys.txt.
+     */
+    public void saveInventory() {
+
+        File file = new File("res/toys.txt");
+
+        try (PrintWriter writer = new PrintWriter(file)) {
+
+            for (Toy toy : toys) {
+
+                if (toy instanceof Figure) {
+
+                    Figure figure = (Figure) toy;
+
+                    writer.println(
+                            figure.getSerialNumber() + ";"
+                            + figure.getName() + ";"
+                            + figure.getBrand() + ";"
+                            + String.format("%.2f", figure.getPrice()) + ";"
+                            + figure.getAvailableCount() + ";"
+                            + figure.getAppropriateAge() + ";"
+                            + figure.getClassification());
+
+                } else if (toy instanceof Animal) {
+
+                    Animal animal = (Animal) toy;
+
+                    writer.println(
+                            animal.getSerialNumber() + ";"
+                            + animal.getName() + ";"
+                            + animal.getBrand() + ";"
+                            + String.format("%.2f", animal.getPrice()) + ";"
+                            + animal.getAvailableCount() + ";"
+                            + animal.getAppropriateAge() + ";"
+                            + animal.getMaterial() + ";"
+                            + animal.getSize());
+
+                } else if (toy instanceof Puzzle) {
+
+                    Puzzle puzzle = (Puzzle) toy;
+
+                    writer.println(
+                            puzzle.getSerialNumber() + ";"
+                            + puzzle.getName() + ";"
+                            + puzzle.getBrand() + ";"
+                            + String.format("%.2f", puzzle.getPrice()) + ";"
+                            + puzzle.getAvailableCount() + ";"
+                            + puzzle.getAppropriateAge() + ";"
+                            + puzzle.getPuzzleType());
+
+                } else if (toy instanceof BoardGame) {
+
+                    BoardGame boardGame = (BoardGame) toy;
+
+                    writer.println(
+                            boardGame.getSerialNumber() + ";"
+                            + boardGame.getName() + ";"
+                            + boardGame.getBrand() + ";"
+                            + String.format("%.2f", boardGame.getPrice()) + ";"
+                            + boardGame.getAvailableCount() + ";"
+                            + boardGame.getAppropriateAge() + ";"
+                            + boardGame.getMinPlayers() + "-"
+                            + boardGame.getMaxPlayers() + ";"
+                            + boardGame.getDesigners());
+                }
+            }
+
+            System.out.println("\nInventory saved successfully.");
+
+        } catch (FileNotFoundException e) {
+
+            System.out.println("Unable to save inventory.");
+        }
     }
 
     /**
