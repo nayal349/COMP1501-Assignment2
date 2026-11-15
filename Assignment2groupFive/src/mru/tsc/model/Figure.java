@@ -1,4 +1,3 @@
-
 package mru.tsc.model;
 
 /**
@@ -22,15 +21,24 @@ public class Figure extends Toy {
      * @param brand the brand of the figure
      * @param price the price of the figure
      * @param availableCount the quantity available in inventory
-     * @param apporpiateAge the recommended age for the figure
-     * @param classifcation the classification of the figure
+     * @param appropriateAge the recommended age for the figure
+     * @param classification the classification of the figure
      */
     public Figure(String serialNumber, String name, String brand,
-                  double price, int availableCount, String apporpiateAge,
-                  String classifcation) {
+                  double price, int availableCount, String appropriateAge,
+                  String classification) {
 
-        super(serialNumber, name, brand, price, availableCount, apporpiateAge);
-        this.classification = classifcation;
+        super(serialNumber, name, brand, price, availableCount, appropriateAge);
+        this.classification = classification;
+    }
+
+    /**
+     * Returns the classification of the figure toy.
+     *
+     * @return the classification of the figure
+     */
+    public String getClassification() {
+        return classification;
     }
 
     /**
