@@ -76,7 +76,7 @@ public class ToyStoreController {
 
                     Animal animal = new Animal(
                             serialNumber, name, brand, price,
-                            availableCount, apporpiateAge, material, size);
+                            availableCount, apporpriateAge, material, size);
 
                     toys.add(animal);
 
