@@ -22,7 +22,6 @@ public class ToyStoreMenu {
      * @param t the controller used by the menu
      */
     public ToyStoreMenu(ToyStoreController t) {
-
         input = new Scanner(System.in);
         controller = t;
     }
@@ -36,20 +35,17 @@ public class ToyStoreMenu {
 
         int option = 0;
 
-        System.out.println(
-                "\n*************************************");
-        System.out.println(
-                "     WELCOME TO TOY STORE COMPANY");
-        System.out.println(
-                "***************************************");
+        System.out.println("\n*************************************");
+        System.out.println("     WELCOME TO TOY STORE COMPANY");
+        System.out.println("***************************************");
 
         System.out.println("\nHow can we help you?\n");
 
-        System.out.println(
-                "(1) Search Inventory and Purchase Toy");
+        System.out.println("(1) Search Inventory and Purchase Toy");
         System.out.println("(2) Add New Toy");
         System.out.println("(3) Remove Toy");
-        System.out.println("(4) Save & Exit");
+        System.out.println("(4) Make a Gift Suggestion");
+        System.out.println("(5) Save & Exit");
 
         System.out.print("\nEnter Option: ");
 
@@ -125,31 +121,22 @@ public class ToyStoreMenu {
 
         do {
 
-            System.out.print(
-                    "\nEnter Serial Number: ");
-
+            System.out.print("\nEnter Serial Number: ");
             serialNumber = input.next();
 
-            if (!controller.isValidSerialNumber(
-                    serialNumber)) {
-
+            if (!controller.isValidSerialNumber(serialNumber)) {
                 System.out.println(
-                        "Invalid Serial Number. "
-                        + "Serial Number must contain 10 digits.");
+                        "Invalid Serial Number. Serial Number must contain 10 digits.");
             }
 
-        } while (!controller.isValidSerialNumber(
-                serialNumber));
+        } while (!controller.isValidSerialNumber(serialNumber));
 
-        Toy toy =
-                controller.searchBySerialNumber(
-                        serialNumber);
+        Toy toy = controller.searchBySerialNumber(serialNumber);
 
         if (toy != null) {
 
             System.out.println("\nToy Found:\n");
             System.out.println(toy);
-
             purchaseSingleToy(toy);
 
         } else {
@@ -167,11 +154,9 @@ public class ToyStoreMenu {
         input.nextLine();
 
         System.out.print("\nEnter Toy Name: ");
-
         String name = input.nextLine();
 
-        ArrayList<Toy> results =
-                controller.searchByName(name);
+        ArrayList<Toy> results = controller.searchByName(name);
 
         if (results.size() > 0) {
 
@@ -194,14 +179,11 @@ public class ToyStoreMenu {
 
         if (type < 1 || type > 4) {
 
-            System.out.println(
-                    "\nInvalid toy type.");
-
+            System.out.println("\nInvalid toy type.");
             return;
         }
 
-        ArrayList<Toy> results =
-                controller.searchByType(type);
+        ArrayList<Toy> results = controller.searchByType(type);
 
         if (results.size() > 0) {
 
@@ -220,24 +202,15 @@ public class ToyStoreMenu {
      *
      * @param results the toys found
      */
-    public void displayResults(
-            ArrayList<Toy> results) {
+    public void displayResults(ArrayList<Toy> results) {
 
         System.out.println(
-                "\nFound "
-                + results.size()
-                + " toy(s):\n");
+                "\nFound " + results.size() + " toy(s):\n");
 
-        for (int i = 0;
-                i < results.size();
-                i++) {
+        for (int i = 0; i < results.size(); i++) {
 
-            System.out.println(
-                    "Toy " + (i + 1));
-
-            System.out.println(
-                    results.get(i));
-
+            System.out.println("Toy " + (i + 1));
+            System.out.println(results.get(i));
             System.out.println();
         }
     }
@@ -247,8 +220,7 @@ public class ToyStoreMenu {
      *
      * @param results search results
      */
-    public void selectToyToPurchase(
-            ArrayList<Toy> results) {
+    public void selectToyToPurchase(ArrayList<Toy> results) {
 
         int selection = -1;
 
@@ -261,8 +233,7 @@ public class ToyStoreMenu {
             System.out.println(
                     "Enter 0 to return to the search menu.");
 
-            System.out.print(
-                    "\nEnter Option: ");
+            System.out.print("\nEnter Option: ");
 
             if (input.hasNextInt()) {
 
@@ -271,18 +242,14 @@ public class ToyStoreMenu {
             } else {
 
                 input.next();
-
-                System.out.println(
-                        "\nInvalid option.");
-
+                System.out.println("\nInvalid option.");
                 continue;
             }
 
             if (selection < 0
                     || selection > results.size()) {
 
-                System.out.println(
-                        "\nInvalid option.");
+                System.out.println("\nInvalid option.");
             }
         }
 
@@ -290,8 +257,7 @@ public class ToyStoreMenu {
             return;
         }
 
-        Toy toy =
-                results.get(selection - 1);
+        Toy toy = results.get(selection - 1);
 
         completePurchase(toy);
     }
@@ -308,14 +274,10 @@ public class ToyStoreMenu {
         while (option != 1
                 && option != 2) {
 
-            System.out.println(
-                    "\n(1) Purchase Toy");
+            System.out.println("\n(1) Purchase Toy");
+            System.out.println("(2) Back to Search Menu");
 
-            System.out.println(
-                    "(2) Back to Search Menu");
-
-            System.out.print(
-                    "\nEnter Option: ");
+            System.out.print("\nEnter Option: ");
 
             if (input.hasNextInt()) {
 
@@ -324,17 +286,14 @@ public class ToyStoreMenu {
             } else {
 
                 input.next();
-
-                System.out.println(
-                        "\nInvalid option.");
+                System.out.println("\nInvalid option.");
             }
 
             if (option != 1
                     && option != 2) {
 
                 System.out.println(
-                        "\nInvalid option. "
-                        + "Please enter 1 or 2.");
+                        "\nInvalid option. Please enter 1 or 2.");
             }
         }
 
@@ -372,28 +331,21 @@ public class ToyStoreMenu {
      */
     public void addNewToy() {
 
-        // Clear the new line left by the main menu.
         input.nextLine();
 
         String serialNumber;
 
         while (true) {
 
-            System.out.print(
-                    "\nEnter Serial Number: ");
+            System.out.print("\nEnter Serial Number: ");
+            serialNumber = input.nextLine().trim();
 
-            serialNumber =
-                    input.nextLine().trim();
-
-            if (!controller.isValidSerialNumber(
-                    serialNumber)) {
+            if (!controller.isValidSerialNumber(serialNumber)) {
 
                 System.out.println(
-                        "Invalid Serial Number. "
-                        + "Serial Number must contain 10 digits.");
+                        "Invalid Serial Number. Serial Number must contain 10 digits.");
 
-            } else if (controller.serialNumberExists(
-                    serialNumber)) {
+            } else if (controller.serialNumberExists(serialNumber)) {
 
                 System.out.println(
                         "A toy with this Serial Number already exists.");
@@ -404,24 +356,17 @@ public class ToyStoreMenu {
             }
         }
 
-        System.out.print(
-                "Enter Toy Name: ");
+        System.out.print("Enter Toy Name: ");
+        String name = input.nextLine();
 
-        String name =
-                input.nextLine();
-
-        System.out.print(
-                "Enter Toy Brand: ");
-
-        String brand =
-                input.nextLine();
+        System.out.print("Enter Toy Brand: ");
+        String brand = input.nextLine();
 
         double price;
 
         while (true) {
 
-            System.out.print(
-                    "Enter Toy Price: ");
+            System.out.print("Enter Toy Price: ");
 
             try {
 
@@ -435,8 +380,7 @@ public class ToyStoreMenu {
             } catch (NumberFormatException e) {
 
                 System.out.println(
-                        "Invalid price. "
-                        + "Please enter a number.");
+                        "Invalid price. Please enter a number.");
 
             } catch (InvalidPriceException e) {
 
@@ -466,8 +410,7 @@ public class ToyStoreMenu {
             while (true) {
 
                 System.out.print(
-                        "Enter Classification "
-                        + "(A/D/H): ");
+                        "Enter Classification (A/D/H): ");
 
                 classification =
                         input.nextLine()
@@ -482,8 +425,7 @@ public class ToyStoreMenu {
                 }
 
                 System.out.println(
-                        "Invalid classification. "
-                        + "Enter A, D, or H.");
+                        "Invalid classification. Enter A, D, or H.");
             }
 
             Figure figure =
@@ -527,8 +469,7 @@ public class ToyStoreMenu {
                 }
 
                 System.out.println(
-                        "Invalid size. "
-                        + "Enter S, M, or L.");
+                        "Invalid size. Enter S, M, or L.");
             }
 
             Animal animal =
@@ -553,8 +494,7 @@ public class ToyStoreMenu {
             while (true) {
 
                 System.out.print(
-                        "Enter Puzzle Type "
-                        + "(M/C/L/T/R): ");
+                        "Enter Puzzle Type (M/C/L/T/R): ");
 
                 puzzleType =
                         input.nextLine()
@@ -571,8 +511,7 @@ public class ToyStoreMenu {
                 }
 
                 System.out.println(
-                        "Invalid puzzle type. "
-                        + "Enter M, C, L, T, or R.");
+                        "Invalid puzzle type. Enter M, C, L, T, or R.");
             }
 
             Puzzle puzzle =
@@ -618,8 +557,7 @@ public class ToyStoreMenu {
             }
 
             System.out.print(
-                    "Enter Designer Names "
-                    + "(use ',' to separate names): ");
+                    "Enter Designer Names (use ',' to separate names): ");
 
             String designers =
                     input.nextLine();
@@ -737,8 +675,7 @@ public class ToyStoreMenu {
                     serialNumber)) {
 
                 System.out.println(
-                        "Invalid Serial Number. "
-                        + "Serial Number must contain 10 digits.");
+                        "Invalid Serial Number. Serial Number must contain 10 digits.");
             }
 
         } while (!controller.isValidSerialNumber(
@@ -792,8 +729,7 @@ public class ToyStoreMenu {
                     && option != 2) {
 
                 System.out.println(
-                        "\nInvalid option. "
-                        + "Please enter 1 or 2.");
+                        "\nInvalid option. Please enter 1 or 2.");
             }
         }
 
@@ -813,6 +749,217 @@ public class ToyStoreMenu {
     }
 
     /**
+     * Makes gift suggestions using optional age, type,
+     * and price range filters.
+     */
+    public void makeGiftSuggestion() {
+
+        input.nextLine();
+
+        System.out.println(
+                "\nGift Suggestion");
+
+        System.out.println(
+                "Press Enter to leave a choice empty.\n");
+
+        int age = -1;
+
+        while (true) {
+
+            System.out.print(
+                    "Enter Recipient Age: ");
+
+            String ageText =
+                    input.nextLine().trim();
+
+            if (ageText.isEmpty()) {
+                break;
+            }
+
+            try {
+
+                age =
+                        Integer.parseInt(
+                                ageText);
+
+                if (age >= 0) {
+                    break;
+                }
+
+                System.out.println(
+                        "Age cannot be negative.");
+
+            } catch (NumberFormatException e) {
+
+                System.out.println(
+                        "Invalid age.");
+            }
+        }
+
+        int type = 0;
+
+        while (true) {
+
+            System.out.println(
+                    "\nToy Type:");
+
+            System.out.println(
+                    "(1) Figure");
+
+            System.out.println(
+                    "(2) Animal");
+
+            System.out.println(
+                    "(3) Puzzle");
+
+            System.out.println(
+                    "(4) Board Game");
+
+            System.out.println(
+                    "Press Enter for Any Type");
+
+            System.out.print(
+                    "Enter Type: ");
+
+            String typeText =
+                    input.nextLine().trim();
+
+            if (typeText.isEmpty()) {
+
+                type = 0;
+                break;
+            }
+
+            try {
+
+                type =
+                        Integer.parseInt(
+                                typeText);
+
+                if (type >= 1
+                        && type <= 4) {
+
+                    break;
+                }
+
+                System.out.println(
+                        "Invalid type. Please enter 1-4.");
+
+            } catch (NumberFormatException e) {
+
+                System.out.println(
+                        "Invalid type. Please enter 1-4.");
+            }
+        }
+
+        double minPrice = -1;
+        double maxPrice = -1;
+
+        while (true) {
+
+            System.out.print(
+                    "\nEnter Minimum Price "
+                    + "(Press Enter to skip price range): ");
+
+            String minText =
+                    input.nextLine().trim();
+
+            if (minText.isEmpty()) {
+                break;
+            }
+
+            try {
+
+                minPrice =
+                        Double.parseDouble(
+                                minText);
+
+                if (minPrice < 0) {
+
+                    System.out.println(
+                            "Price cannot be negative.");
+
+                    minPrice = -1;
+                    continue;
+                }
+
+            } catch (NumberFormatException e) {
+
+                System.out.println(
+                        "Invalid price.");
+
+                minPrice = -1;
+                continue;
+            }
+
+            while (true) {
+
+                System.out.print(
+                        "Enter Maximum Price: ");
+
+                String maxText =
+                        input.nextLine().trim();
+
+                try {
+
+                    maxPrice =
+                            Double.parseDouble(
+                                    maxText);
+
+                    if (maxPrice < minPrice) {
+
+                        System.out.println(
+                                "Maximum price cannot be less than minimum price.");
+
+                        continue;
+                    }
+
+                    break;
+
+                } catch (NumberFormatException e) {
+
+                    System.out.println(
+                            "Invalid price.");
+                }
+            }
+
+            break;
+        }
+
+        if (age == -1
+                && type == 0
+                && minPrice == -1) {
+
+            System.out.println(
+                    "\nPlease enter at least one gift suggestion choice.");
+
+            return;
+        }
+
+        ArrayList<Toy> results =
+                controller.suggestGift(
+                        age,
+                        type,
+                        minPrice,
+                        maxPrice);
+
+        if (results.size() > 0) {
+
+            System.out.println(
+                    "\nGift Suggestions:");
+
+            displayResults(results);
+
+            selectToyToPurchase(results);
+
+        } else {
+
+            System.out.println(
+                    "\nNo gift suggestions matched your choices.");
+        }
+    }
+
+    /**
      * Displays and handles the search menu.
      */
     public void searchInventory() {
@@ -827,24 +974,29 @@ public class ToyStoreMenu {
             switch (option) {
 
                 case 1:
+
                     searchBySerialNumber();
                     break;
 
                 case 2:
+
                     searchByName();
                     break;
 
                 case 3:
+
                     searchByType();
                     break;
 
                 case 4:
+
                     break;
 
                 default:
+
                     System.out.println(
-                            "Invalid option. "
-                            + "Please enter 1-4.");
+                            "Invalid option. Please enter 1-4.");
+
                     break;
             }
         }
@@ -857,7 +1009,7 @@ public class ToyStoreMenu {
 
         int option = 0;
 
-        while (option != 4) {
+        while (option != 5) {
 
             option =
                     displayMainMenu();
@@ -881,11 +1033,15 @@ public class ToyStoreMenu {
 
                 case 4:
 
+                    makeGiftSuggestion();
+                    break;
+
+                case 5:
+
                     controller.saveInventory();
 
                     System.out.println(
-                            "Thank you for visiting "
-                            + "Toy Store Company!");
+                            "Thank you for visiting Toy Store Company!");
 
                     System.out.println(
                             "Goodbye!");
@@ -895,8 +1051,7 @@ public class ToyStoreMenu {
                 default:
 
                     System.out.println(
-                            "Invalid option. "
-                            + "Please enter 1-4.");
+                            "Invalid option. Please enter 1-5.");
 
                     break;
             }
