@@ -1,4 +1,3 @@
-
 package mru.tsc.controller;
 
 import mru.tsc.model.*;
@@ -54,29 +53,30 @@ public class ToyStoreController {
                     String brand = line[2];
                     double price = Double.parseDouble(line[3]);
                     int availableCount = Integer.parseInt(line[4]);
-                    String apporpiateAge = line[5];
+                    String appropriateAge = line[5];
                     String classification = line[6];
 
                     Figure figure = new Figure(
                             serialNumber, name, brand, price,
-                            availableCount, apporpiateAge, classification);
+                            availableCount, appropriateAge, classification);
 
                     toys.add(figure);
 
-                } else if (line[0].charAt(0) == '2' || line[0].charAt(0) == '3') {
+                } else if (line[0].charAt(0) == '2'
+                        || line[0].charAt(0) == '3') {
 
                     String serialNumber = line[0];
                     String name = line[1];
                     String brand = line[2];
                     double price = Double.parseDouble(line[3]);
                     int availableCount = Integer.parseInt(line[4]);
-                    String apporpriateAge = line[5];
+                    String appropriateAge = line[5];
                     String material = line[6];
                     String size = line[7];
 
                     Animal animal = new Animal(
                             serialNumber, name, brand, price,
-                            availableCount, apporpriateAge, material, size);
+                            availableCount, appropriateAge, material, size);
 
                     toys.add(animal);
 
@@ -89,12 +89,12 @@ public class ToyStoreController {
                     String brand = line[2];
                     double price = Double.parseDouble(line[3]);
                     int availableCount = Integer.parseInt(line[4]);
-                    String apporpiateAge = line[5];
+                    String appropriateAge = line[5];
                     String puzzleType = line[6];
 
                     Puzzle puzzle = new Puzzle(
                             serialNumber, name, brand, price,
-                            availableCount, apporpiateAge, puzzleType);
+                            availableCount, appropriateAge, puzzleType);
 
                     toys.add(puzzle);
 
@@ -107,7 +107,7 @@ public class ToyStoreController {
                     String brand = line[2];
                     double price = Double.parseDouble(line[3]);
                     int availableCount = Integer.parseInt(line[4]);
-                    String apporpiateAge = line[5];
+                    String appropriateAge = line[5];
 
                     String[] players = line[6].split("-");
 
@@ -117,46 +117,71 @@ public class ToyStoreController {
 
                     BoardGame boardGame = new BoardGame(
                             serialNumber, name, brand, price,
-                            availableCount, apporpiateAge,
+                            availableCount, appropriateAge,
                             minPlayers, maxPlayers, designers);
 
                     toys.add(boardGame);
 
                 } else {
+
                     System.out.println("Invalid Serial Number");
                 }
             }
+
         } catch (FileNotFoundException e) {
+
             System.out.println(e.getMessage());
         }
     }
+
     /**
-    Searches for a toy using its serial number.
-    *
-    *@param serialNumber the serial number to search for
-    *@return the matching Toy object, or null if not found
-    */
+     * Checks if a serial number contains exactly 10 digits.
+     *
+     * @param serialNumber the serial number to validate
+     * @return true if the serial number is valid, otherwise false
+     */
+    public boolean isValidSerialNumber(String serialNumber) {
+
+        if (serialNumber.length() != 10) {
+            return false;
+        }
+
+        for (int i = 0; i < serialNumber.length(); i++) {
+
+            if (!Character.isDigit(serialNumber.charAt(i))) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Searches for a toy using its serial number.
+     *
+     * @param serialNumber the serial number to search for
+     * @return the matching Toy object, or null if not found
+     */
     public Toy searchBySerialNumber(String serialNumber) {
-        
+
         for (Toy toy : toys) {
-            
+
             if (toy.getSerialNumber().equalsIgnoreCase(serialNumber)) {
-                
                 return toy;
             }
         }
-        
+
         return null;
     }
 
-    /** 
-    *Searches for toys containing the entered name.
-    *
-    *@param name the name or part of the name to search for
-    *@return an ArrayList containing matching toys
-    */
+    /**
+     * Searches for toys containing the entered name.
+     *
+     * @param name the name or part of the name to search for
+     * @return an ArrayList containing matching toys
+     */
     public ArrayList<Toy> searchByName(String name) {
-        
+
         ArrayList<Toy> results = new ArrayList<Toy>();
 
         for (Toy toy : toys) {
@@ -170,13 +195,13 @@ public class ToyStoreController {
     }
 
     /**
-        *Searches for toys by type.
-        *
-        *@param type the toy type to search for
-        *@return an ArrayList containing matching toys
-        */
+     * Searches for toys by type.
+     *
+     * @param type the toy type to search for
+     * @return an ArrayList containing matching toys
+     */
     public ArrayList<Toy> searchByType(int type) {
-        
+
         ArrayList<Toy> results = new ArrayList<Toy>();
 
         for (Toy toy : toys) {
@@ -193,12 +218,30 @@ public class ToyStoreController {
                 results.add(toy);
             }
 
-            else if(type ==4 && toy instanceof BoardGame) {
+            else if (type == 4 && toy instanceof BoardGame) {
                 results.add(toy);
             }
         }
 
         return results;
+    }
+
+    /**
+     * Purchases a toy if it is available.
+     *
+     * @param toy the toy being purchased
+     * @return true if the purchase was successful, otherwise false
+     */
+    public boolean purchaseToy(Toy toy) {
+
+        if (toy.getAvailableCount() > 0) {
+
+            toy.setAvailableCount(toy.getAvailableCount() - 1);
+
+            return true;
+        }
+
+        return false;
     }
 
     /**
