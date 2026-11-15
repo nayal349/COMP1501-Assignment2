@@ -136,7 +136,7 @@ public class ToyStoreController {
     *@param serialNumber the serial number to search for
     *@return the matching Toy object, or null if not found
     */
-    public Toy seachBySerialNumber(String serialNumber) {
+    public Toy searchBySerialNumber(String serialNumber) {
         
         for (Toy toy : toys) {
             
