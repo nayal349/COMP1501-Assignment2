@@ -1,192 +1,142 @@
-package mru.tsc.controller;
-import mru.tsc.model.*;
-import mru.tsc.exceptions.*;
 
+package mru.tsc.controller;
+
+import mru.tsc.model.*;
 
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.io.File;
 import java.io.FileNotFoundException;
 
-
-
+/**
+ * Manages the inventory for the Toy Store Company.
+ * Loads toy records from a file and stores Figure, Animal,
+ * Puzzle, and BoardGame objects in a single ArrayList.
+ */
 public class ToyStoreController {
-	
-	private ArrayList <Toy> toys;
-	
-	
-	
-	
-	
-	
-	public ToyStoreController () {
-		toys = new ArrayList<>();
-	}
-	
-	
-	
-	//make comments and java doc
-	
-	public void loadInventory () {
-		
 
+    /**
+     * The list containing all toys in the inventory.
+     */
+    private ArrayList<Toy> toys;
 
-		File file = new File ("res/toys.txt");
-	
-		
-		
-		try (Scanner output = new Scanner(file)){
-			
-			while (output.hasNext()) {
-				
-				String [] line = output.nextLine().split(";");
-				
-				if (line[0].charAt(0) == '0' || line[0].charAt(0) == '1') {
-					
-					
-					//converting string to needed objects
-					
-					String serialNumber = line[0];
-					String name = line[1];
-					String brand = line[2];
-					double price = Double.parseDouble(line[3]);
-					int availableCount = Integer.parseInt(line[4]);
-					String apporpiateAge = line[5];
-					String classification = line [6];
+    /**
+     * Constructs a ToyStoreController with an empty inventory.
+     */
+    public ToyStoreController() {
+        toys = new ArrayList<>();
+    }
 
-					
-					Figure figure = new Figure (serialNumber, name, brand, price, availableCount, apporpiateAge, classification);
-					
-					//adding to arrayList
-					toys.add(figure);
-				
-				}
-				else if (line[0].charAt(0) == '2' || line[0].charAt(0) == '3') {
-					
-					//converting string to needed objects
-					
-					String serialNumber = line[0];
-					String name = line[1];
-					String brand = line[2];
-					double price = Double.parseDouble(line[3]);
-					int availableCount = Integer.parseInt(line[4]);
-					String apporpiateAge = line[5];
-					String material = line [6];
-					String size = line [7];
-					
+    /**
+     * Reads toy records from the toys.txt file and adds them
+     * to the inventory.
+     *
+     * Each record is separated by semicolons. The first digit
+     * of the serial number determines which toy subclass
+     * is instantiated.
+     *
+     * Displays an error message if the file cannot be found.
+     */
+    public void loadInventory() {
 
-					
-					Animal animal = new Animal (serialNumber, name, brand, price, availableCount, apporpiateAge, material, size);
-					
-					//adding to arrayList
-					toys.add(animal);
-					
-					
-					
-					
-					
-					
-					
-				}
-				
-				
-				
-				else if (line[0].charAt(0) == '4' || line[0].charAt(0) == '5' || line[0].charAt(0) == '6') {
-					
-					//converting string to needed objects
-					
-					String serialNumber = line[0];
-					String name = line[1];
-					String brand = line[2];
-					double price = Double.parseDouble(line[3]);
-					int availableCount = Integer.parseInt(line[4]);
-					String apporpiateAge = line[5];
-					String puzzleType = line [6];
-					
-					
+        File file = new File("res/toys.txt");
 
-					
-					Puzzle puzzle = new Puzzle (serialNumber, name, brand, price, availableCount, apporpiateAge, puzzleType);
-					
-					//adding to arrayList
-					toys.add(puzzle);
+        try (Scanner output = new Scanner(file)) {
 
-				
-				
-				
-				
-			
-			}
-				else if (line[0].charAt(0) == '7' || line[0].charAt(0) == '8' || line[0].charAt(0) == '9') {
-					
-					//converting string to needed objects
-					
-					String serialNumber = line[0];
-					String name = line[1];
-					String brand = line[2];
-					double price = Double.parseDouble(line[3]);
-					int availableCount = Integer.parseInt(line[4]);
-					String apporpiateAge = line[5];
-					
-					
-					
-					
-					//Separating min and max
-					
-					String [] players = line[6].split("-");
-					
-					
-					int minPlayers = Integer.parseInt(players[0]);
-					int maxPlayers = Integer.parseInt(players[1]);
-					String designers = line[7];
-					
-					
+            while (output.hasNextLine()) {
 
-					
-					BoardGame boardGame = new BoardGame (serialNumber, name, brand, price, availableCount, apporpiateAge, minPlayers, maxPlayers, designers);
-					
-					//adding to arrayList
-					toys.add(boardGame);
+                String[] line = output.nextLine().split(";");
 
-				
-				
-				
-				
-			
-			}
-				else {
-					System.out.println("Invalid Serial Number");
-				}
-				
-			
-			
-			
-		
-			
-			
-			
-			}
-		}
-		catch (FileNotFoundException e) {
-			System.out.println(e.getMessage());
-			
-		}
-		
-		
-		
-	
-	
-	
-	}
+                if (line[0].charAt(0) == '0' || line[0].charAt(0) == '1') {
 
+                    String serialNumber = line[0];
+                    String name = line[1];
+                    String brand = line[2];
+                    double price = Double.parseDouble(line[3]);
+                    int availableCount = Integer.parseInt(line[4]);
+                    String apporpiateAge = line[5];
+                    String classification = line[6];
 
+                    Figure figure = new Figure(
+                            serialNumber, name, brand, price,
+                            availableCount, apporpiateAge, classification);
 
-	public ArrayList<Toy> getToys() {
-		return toys;
-	}
+                    toys.add(figure);
 
+                } else if (line[0].charAt(0) == '2' || line[0].charAt(0) == '3') {
 
+                    String serialNumber = line[0];
+                    String name = line[1];
+                    String brand = line[2];
+                    double price = Double.parseDouble(line[3]);
+                    int availableCount = Integer.parseInt(line[4]);
+                    String apporpiateAge = line[5];
+                    String material = line[6];
+                    String size = line[7];
 
-	
+                    Animal animal = new Animal(
+                            serialNumber, name, brand, price,
+                            availableCount, apporpiateAge, material, size);
 
+                    toys.add(animal);
+
+                } else if (line[0].charAt(0) == '4'
+                        || line[0].charAt(0) == '5'
+                        || line[0].charAt(0) == '6') {
+
+                    String serialNumber = line[0];
+                    String name = line[1];
+                    String brand = line[2];
+                    double price = Double.parseDouble(line[3]);
+                    int availableCount = Integer.parseInt(line[4]);
+                    String apporpiateAge = line[5];
+                    String puzzleType = line[6];
+
+                    Puzzle puzzle = new Puzzle(
+                            serialNumber, name, brand, price,
+                            availableCount, apporpiateAge, puzzleType);
+
+                    toys.add(puzzle);
+
+                } else if (line[0].charAt(0) == '7'
+                        || line[0].charAt(0) == '8'
+                        || line[0].charAt(0) == '9') {
+
+                    String serialNumber = line[0];
+                    String name = line[1];
+                    String brand = line[2];
+                    double price = Double.parseDouble(line[3]);
+                    int availableCount = Integer.parseInt(line[4]);
+                    String apporpiateAge = line[5];
+
+                    String[] players = line[6].split("-");
+
+                    int minPlayers = Integer.parseInt(players[0]);
+                    int maxPlayers = Integer.parseInt(players[1]);
+                    String designers = line[7];
+
+                    BoardGame boardGame = new BoardGame(
+                            serialNumber, name, brand, price,
+                            availableCount, apporpiateAge,
+                            minPlayers, maxPlayers, designers);
+
+                    toys.add(boardGame);
+
+                } else {
+                    System.out.println("Invalid Serial Number");
+                }
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    /**
+     * Returns the list of toys currently stored in the inventory.
+     *
+     * @return an ArrayList containing the Toy objects
+     */
+    public ArrayList<Toy> getToys() {
+        return toys;
+    }
 }
