@@ -70,7 +70,7 @@ public class ToyStoreController {
                     String brand = line[2];
                     double price = Double.parseDouble(line[3]);
                     int availableCount = Integer.parseInt(line[4]);
-                    String apporpiateAge = line[5];
+                    String apporpriateAge = line[5];
                     String material = line[6];
                     String size = line[7];
 
