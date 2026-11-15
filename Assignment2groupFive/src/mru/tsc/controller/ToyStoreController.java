@@ -32,12 +32,6 @@ public class ToyStoreController {
     /**
      * Reads toy records from the toys.txt file and adds them
      * to the inventory.
-     *
-     * Each record is separated by semicolons. The first digit
-     * of the serial number determines which toy subclass
-     * is instantiated.
-     *
-     * Displays an error message if the file cannot be found.
      */
     public void loadInventory() {
 
@@ -130,13 +124,11 @@ public class ToyStoreController {
                     toys.add(boardGame);
 
                 } else {
-
                     System.out.println("Invalid Serial Number");
                 }
             }
 
         } catch (FileNotFoundException e) {
-
             System.out.println(e.getMessage());
         }
     }
@@ -170,7 +162,6 @@ public class ToyStoreController {
      * @return true if the serial number already exists
      */
     public boolean serialNumberExists(String serialNumber) {
-
         return searchBySerialNumber(serialNumber) != null;
     }
 
@@ -204,9 +195,7 @@ public class ToyStoreController {
 
         for (Toy toy : toys) {
 
-            if (toy.getName().toLowerCase()
-                    .contains(name.toLowerCase())) {
-
+            if (toy.getName().toLowerCase().contains(name.toLowerCase())) {
                 results.add(toy);
             }
         }
@@ -228,17 +217,72 @@ public class ToyStoreController {
 
             if (type == 1 && toy instanceof Figure) {
                 results.add(toy);
-            }
 
-            else if (type == 2 && toy instanceof Animal) {
+            } else if (type == 2 && toy instanceof Animal) {
+                results.add(toy);
+
+            } else if (type == 3 && toy instanceof Puzzle) {
+                results.add(toy);
+
+            } else if (type == 4 && toy instanceof BoardGame) {
                 results.add(toy);
             }
+        }
 
-            else if (type == 3 && toy instanceof Puzzle) {
-                results.add(toy);
+        return results;
+    }
+
+    /**
+     * Searches for toys that match the gift suggestion choices.
+     * A value of -1 means that filter was left empty.
+     * A type of 0 means any toy type.
+     *
+     * @param age the recipient's age, or -1 for any age
+     * @param type the toy type, or 0 for any type
+     * @param minPrice the minimum price, or -1 for any price
+     * @param maxPrice the maximum price, or -1 for any price
+     * @return an ArrayList containing matching gift suggestions
+     */
+    public ArrayList<Toy> suggestGift(
+            int age, int type, double minPrice, double maxPrice) {
+
+        ArrayList<Toy> results = new ArrayList<Toy>();
+
+        for (Toy toy : toys) {
+
+            boolean matchesAge = true;
+            boolean matchesType = true;
+            boolean matchesPrice = true;
+
+            if (age != -1) {
+
+                String ageText = toy.getAppropriateAge()
+                        .replace("+", "")
+                        .trim();
+
+                int toyAge = Integer.parseInt(ageText);
+
+                matchesAge = age >= toyAge;
             }
 
-            else if (type == 4 && toy instanceof BoardGame) {
+            if (type != 0) {
+
+                matchesType =
+                        (type == 1 && toy instanceof Figure)
+                        || (type == 2 && toy instanceof Animal)
+                        || (type == 3 && toy instanceof Puzzle)
+                        || (type == 4 && toy instanceof BoardGame);
+            }
+
+            if (minPrice != -1 && toy.getPrice() < minPrice) {
+                matchesPrice = false;
+            }
+
+            if (maxPrice != -1 && toy.getPrice() > maxPrice) {
+                matchesPrice = false;
+            }
+
+            if (matchesAge && matchesType && matchesPrice) {
                 results.add(toy);
             }
         }
@@ -255,10 +299,7 @@ public class ToyStoreController {
     public boolean purchaseToy(Toy toy) {
 
         if (toy.getAvailableCount() > 0) {
-
-            toy.setAvailableCount(
-                    toy.getAvailableCount() - 1);
-
+            toy.setAvailableCount(toy.getAvailableCount() - 1);
             return true;
         }
 
@@ -271,7 +312,6 @@ public class ToyStoreController {
      * @param toy the toy to add
      */
     public void addToy(Toy toy) {
-
         toys.add(toy);
     }
 
@@ -282,7 +322,6 @@ public class ToyStoreController {
      * @return true if the toy was removed
      */
     public boolean removeToy(Toy toy) {
-
         return toys.remove(toy);
     }
 
@@ -296,7 +335,6 @@ public class ToyStoreController {
             throws InvalidPriceException {
 
         if (price < 0) {
-
             throw new InvalidPriceException(
                     "Price cannot be negative.");
         }
@@ -314,7 +352,6 @@ public class ToyStoreController {
             throws InvalidPlayersException {
 
         if (minPlayers > maxPlayers) {
-
             throw new InvalidPlayersException(
                     "Minimum players cannot be greater than maximum players.");
         }
@@ -339,8 +376,7 @@ public class ToyStoreController {
                             figure.getSerialNumber() + ";"
                             + figure.getName() + ";"
                             + figure.getBrand() + ";"
-                            + String.format("%.2f",
-                                    figure.getPrice()) + ";"
+                            + String.format("%.2f", figure.getPrice()) + ";"
                             + figure.getAvailableCount() + ";"
                             + figure.getAppropriateAge() + ";"
                             + figure.getClassification());
@@ -353,8 +389,7 @@ public class ToyStoreController {
                             animal.getSerialNumber() + ";"
                             + animal.getName() + ";"
                             + animal.getBrand() + ";"
-                            + String.format("%.2f",
-                                    animal.getPrice()) + ";"
+                            + String.format("%.2f", animal.getPrice()) + ";"
                             + animal.getAvailableCount() + ";"
                             + animal.getAppropriateAge() + ";"
                             + animal.getMaterial() + ";"
@@ -368,8 +403,7 @@ public class ToyStoreController {
                             puzzle.getSerialNumber() + ";"
                             + puzzle.getName() + ";"
                             + puzzle.getBrand() + ";"
-                            + String.format("%.2f",
-                                    puzzle.getPrice()) + ";"
+                            + String.format("%.2f", puzzle.getPrice()) + ";"
                             + puzzle.getAvailableCount() + ";"
                             + puzzle.getAppropriateAge() + ";"
                             + puzzle.getPuzzleType());
@@ -382,8 +416,7 @@ public class ToyStoreController {
                             boardGame.getSerialNumber() + ";"
                             + boardGame.getName() + ";"
                             + boardGame.getBrand() + ";"
-                            + String.format("%.2f",
-                                    boardGame.getPrice()) + ";"
+                            + String.format("%.2f", boardGame.getPrice()) + ";"
                             + boardGame.getAvailableCount() + ";"
                             + boardGame.getAppropriateAge() + ";"
                             + boardGame.getMinPlayers() + "-"
@@ -392,13 +425,10 @@ public class ToyStoreController {
                 }
             }
 
-            System.out.println(
-                    "\nInventory saved successfully.");
+            System.out.println("\nInventory saved successfully.");
 
         } catch (FileNotFoundException e) {
-
-            System.out.println(
-                    "Unable to save inventory.");
+            System.out.println("Unable to save inventory.");
         }
     }
 
@@ -408,7 +438,6 @@ public class ToyStoreController {
      * @return an ArrayList containing Toy objects
      */
     public ArrayList<Toy> getToys() {
-
         return toys;
     }
 }
