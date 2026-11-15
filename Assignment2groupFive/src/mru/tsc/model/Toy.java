@@ -48,16 +48,16 @@ public abstract class Toy {
      * @param availableCount the quantity available in inventory
      * @param apporpiateAge the recommended age for the toy
      */
-    public Toy(String serialNumber, String name, String brand,
-               double price, int availableCount, String apporpiateAge) {
+  public Toy(String serialNumber, String name, String brand,
+           double price, int availableCount, String appropriateAge) {
 
-        this.serialNumber = serialNumber;
-        this.name = name;
-        this.brand = brand;
-        this.price = price;
-        this.availableCount = availableCount;
-        this.appropriateAge = apporpiateAge;
-    }
+    this.serialNumber = serialNumber;
+    this.name = name;
+    this.brand = brand;
+    this.price = price;
+    this.availableCount = availableCount;
+    this.appropriateAge = appropriateAge;
+}
 
     /**
      * Returns the unique serial number of the toy.
