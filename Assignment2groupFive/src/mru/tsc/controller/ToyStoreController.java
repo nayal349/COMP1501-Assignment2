@@ -1,6 +1,8 @@
 package mru.tsc.controller;
 
 import mru.tsc.model.*;
+import mru.tsc.exceptions.InvalidPriceException;
+import mru.tsc.exceptions.InvalidPlayersException;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -47,7 +49,8 @@ public class ToyStoreController {
 
                 String[] line = output.nextLine().split(";");
 
-                if (line[0].charAt(0) == '0' || line[0].charAt(0) == '1') {
+                if (line[0].charAt(0) == '0'
+                        || line[0].charAt(0) == '1') {
 
                     String serialNumber = line[0];
                     String name = line[1];
@@ -59,7 +62,8 @@ public class ToyStoreController {
 
                     Figure figure = new Figure(
                             serialNumber, name, brand, price,
-                            availableCount, appropriateAge, classification);
+                            availableCount, appropriateAge,
+                            classification);
 
                     toys.add(figure);
 
@@ -77,7 +81,8 @@ public class ToyStoreController {
 
                     Animal animal = new Animal(
                             serialNumber, name, brand, price,
-                            availableCount, appropriateAge, material, size);
+                            availableCount, appropriateAge,
+                            material, size);
 
                     toys.add(animal);
 
@@ -95,7 +100,8 @@ public class ToyStoreController {
 
                     Puzzle puzzle = new Puzzle(
                             serialNumber, name, brand, price,
-                            availableCount, appropriateAge, puzzleType);
+                            availableCount, appropriateAge,
+                            puzzleType);
 
                     toys.add(puzzle);
 
@@ -158,6 +164,17 @@ public class ToyStoreController {
     }
 
     /**
+     * Checks whether a serial number already exists.
+     *
+     * @param serialNumber the serial number to check
+     * @return true if the serial number already exists
+     */
+    public boolean serialNumberExists(String serialNumber) {
+
+        return searchBySerialNumber(serialNumber) != null;
+    }
+
+    /**
      * Searches for a toy using its serial number.
      *
      * @param serialNumber the serial number to search for
@@ -187,7 +204,9 @@ public class ToyStoreController {
 
         for (Toy toy : toys) {
 
-            if (toy.getName().toLowerCase().contains(name.toLowerCase())) {
+            if (toy.getName().toLowerCase()
+                    .contains(name.toLowerCase())) {
+
                 results.add(toy);
             }
         }
@@ -231,13 +250,14 @@ public class ToyStoreController {
      * Purchases a toy if it is available.
      *
      * @param toy the toy being purchased
-     * @return true if the purchase was successful, otherwise false
+     * @return true if the purchase was successful
      */
     public boolean purchaseToy(Toy toy) {
 
         if (toy.getAvailableCount() > 0) {
 
-            toy.setAvailableCount(toy.getAvailableCount() - 1);
+            toy.setAvailableCount(
+                    toy.getAvailableCount() - 1);
 
             return true;
         }
@@ -246,14 +266,58 @@ public class ToyStoreController {
     }
 
     /**
+     * Adds a new toy to the inventory.
+     *
+     * @param toy the toy to add
+     */
+    public void addToy(Toy toy) {
+
+        toys.add(toy);
+    }
+
+    /**
      * Removes a toy from the inventory.
      *
      * @param toy the toy to remove
-     * @return true if the toy was removed, otherwise false
+     * @return true if the toy was removed
      */
     public boolean removeToy(Toy toy) {
 
         return toys.remove(toy);
+    }
+
+    /**
+     * Checks that the price is not negative.
+     *
+     * @param price the price to validate
+     * @throws InvalidPriceException if the price is negative
+     */
+    public void validatePrice(double price)
+            throws InvalidPriceException {
+
+        if (price < 0) {
+
+            throw new InvalidPriceException(
+                    "Price cannot be negative.");
+        }
+    }
+
+    /**
+     * Checks that minimum players is not greater
+     * than maximum players.
+     *
+     * @param minPlayers minimum number of players
+     * @param maxPlayers maximum number of players
+     * @throws InvalidPlayersException if minimum is greater
+     */
+    public void validatePlayers(int minPlayers, int maxPlayers)
+            throws InvalidPlayersException {
+
+        if (minPlayers > maxPlayers) {
+
+            throw new InvalidPlayersException(
+                    "Minimum players cannot be greater than maximum players.");
+        }
     }
 
     /**
@@ -275,7 +339,8 @@ public class ToyStoreController {
                             figure.getSerialNumber() + ";"
                             + figure.getName() + ";"
                             + figure.getBrand() + ";"
-                            + String.format("%.2f", figure.getPrice()) + ";"
+                            + String.format("%.2f",
+                                    figure.getPrice()) + ";"
                             + figure.getAvailableCount() + ";"
                             + figure.getAppropriateAge() + ";"
                             + figure.getClassification());
@@ -288,7 +353,8 @@ public class ToyStoreController {
                             animal.getSerialNumber() + ";"
                             + animal.getName() + ";"
                             + animal.getBrand() + ";"
-                            + String.format("%.2f", animal.getPrice()) + ";"
+                            + String.format("%.2f",
+                                    animal.getPrice()) + ";"
                             + animal.getAvailableCount() + ";"
                             + animal.getAppropriateAge() + ";"
                             + animal.getMaterial() + ";"
@@ -302,7 +368,8 @@ public class ToyStoreController {
                             puzzle.getSerialNumber() + ";"
                             + puzzle.getName() + ";"
                             + puzzle.getBrand() + ";"
-                            + String.format("%.2f", puzzle.getPrice()) + ";"
+                            + String.format("%.2f",
+                                    puzzle.getPrice()) + ";"
                             + puzzle.getAvailableCount() + ";"
                             + puzzle.getAppropriateAge() + ";"
                             + puzzle.getPuzzleType());
@@ -315,7 +382,8 @@ public class ToyStoreController {
                             boardGame.getSerialNumber() + ";"
                             + boardGame.getName() + ";"
                             + boardGame.getBrand() + ";"
-                            + String.format("%.2f", boardGame.getPrice()) + ";"
+                            + String.format("%.2f",
+                                    boardGame.getPrice()) + ";"
                             + boardGame.getAvailableCount() + ";"
                             + boardGame.getAppropriateAge() + ";"
                             + boardGame.getMinPlayers() + "-"
@@ -324,20 +392,23 @@ public class ToyStoreController {
                 }
             }
 
-            System.out.println("\nInventory saved successfully.");
+            System.out.println(
+                    "\nInventory saved successfully.");
 
         } catch (FileNotFoundException e) {
 
-            System.out.println("Unable to save inventory.");
+            System.out.println(
+                    "Unable to save inventory.");
         }
     }
 
     /**
-     * Returns the list of toys currently stored in the inventory.
+     * Returns the list of toys currently stored.
      *
-     * @return an ArrayList containing the Toy objects
+     * @return an ArrayList containing Toy objects
      */
     public ArrayList<Toy> getToys() {
+
         return toys;
     }
 }
