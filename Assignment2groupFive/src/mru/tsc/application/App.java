@@ -11,7 +11,6 @@ public class App {
 
     /**
      * Main method that starts the application.
-     *
      * @param args command-line arguments
      */
     public static void main(String[] args) {

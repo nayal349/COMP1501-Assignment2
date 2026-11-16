@@ -133,6 +133,11 @@ public class ToyStoreController {
         }
     }
 
+    
+    
+    
+    
+    
     /**
      * Checks if a serial number contains exactly 10 digits.
      *
@@ -155,6 +160,10 @@ public class ToyStoreController {
         return true;
     }
 
+    
+    
+    
+    
     /**
      * Checks whether a serial number already exists.
      *
@@ -165,6 +174,9 @@ public class ToyStoreController {
         return searchBySerialNumber(serialNumber) != null;
     }
 
+    
+    
+    
     /**
      * Searches for a toy using its serial number.
      *
@@ -203,6 +215,10 @@ public class ToyStoreController {
         return results;
     }
 
+    
+    
+    
+    
     /**
      * Searches for toys by type.
      *
@@ -232,6 +248,10 @@ public class ToyStoreController {
         return results;
     }
 
+    
+    
+    
+    
     /**
      * Searches for toys that match the gift suggestion choices.
      * A value of -1 means that filter was left empty.
@@ -297,6 +317,11 @@ public class ToyStoreController {
         return results;
     }
 
+    
+    
+    
+    
+    
     /**
      * Purchases a toy if it is available.
      *
@@ -322,6 +347,10 @@ public class ToyStoreController {
         toys.add(toy);
     }
 
+    
+    
+    
+    
     /**
      * Removes a toy from the inventory.
      *
@@ -332,6 +361,10 @@ public class ToyStoreController {
         return toys.remove(toy);
     }
 
+    
+    
+    
+    
     /**
      * Checks that the price is not negative.
      *
@@ -347,6 +380,10 @@ public class ToyStoreController {
         }
     }
 
+    
+    
+    
+    
     /**
      * Checks that minimum players is not greater
      * than maximum players.
@@ -364,6 +401,9 @@ public class ToyStoreController {
         }
     }
 
+    
+    
+    
     /**
      * Saves all toys in the inventory back to toys.txt.
      */
@@ -439,9 +479,13 @@ public class ToyStoreController {
         }
     }
 
+    
+    
+    
+    
+    
     /**
      * Returns the list of toys currently stored.
-     *
      * @return an ArrayList containing Toy objects
      */
     public ArrayList<Toy> getToys() {
