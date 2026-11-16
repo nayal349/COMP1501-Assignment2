@@ -19,17 +19,17 @@ public class App {
 
     /**
      * Starts the application by loading the inventory
-     * and displaying the menu.
+     * and displaying the menu
      */
     public static void startApplication() {
 
-        // Create the controller.
+        // Create the controller
         ToyStoreController controller = new ToyStoreController();
 
-        // Load the toy inventory.
+        // Load the toy inventory
         controller.loadInventory();
 
-        // Create the menu.
+        // Create the menu
         ToyStoreMenu menu = new ToyStoreMenu(controller);
 
         // Display the menu.
