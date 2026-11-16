@@ -58,4 +58,7 @@ JUnit tests are included in the project's test source folder.
 
 ## Contributors
 
-[Replace this line with the names of all group members.]
+Mohamed: the model package, and controller, javadoc
+Nathan: Exceptions package, view package, junit
+Pushkar: bug fixes, javadoc
+
