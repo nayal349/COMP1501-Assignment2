@@ -17,8 +17,7 @@ public class ToyStoreMenu {
     private ToyStoreController controller;
 
     /**
-     * Creates a MainMenu object.
-     *
+     * Creates a ToystoreMenu object.
      * @param t the controller used by the menu
      */
     public ToyStoreMenu(ToyStoreController t) {
@@ -28,7 +27,6 @@ public class ToyStoreMenu {
 
     /**
      * Displays the main menu.
-     *
      * @return the option selected by the user
      */
     public int displayMainMenu() {
@@ -60,7 +58,6 @@ public class ToyStoreMenu {
 
     /**
      * Displays the search menu.
-     *
      * @return the search option selected
      */
     public int displaySearchMenu() {
@@ -87,7 +84,6 @@ public class ToyStoreMenu {
 
     /**
      * Displays the toy type menu.
-     *
      * @return the selected toy type
      */
     public int displayTypeMenu() {
@@ -305,7 +301,6 @@ public class ToyStoreMenu {
 
     /**
      * Completes a toy purchase.
-     *
      * @param toy the toy selected
      */
     public void completePurchase(Toy toy) {
@@ -616,7 +611,6 @@ public class ToyStoreMenu {
 
     /**
      * Reads an integer that is zero or greater.
-     *
      * @param message message displayed to user
      * @return valid integer
      */

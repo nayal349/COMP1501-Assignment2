@@ -49,7 +49,6 @@ public class BoardGame extends Toy {
 
     /**
      * Returns the minimum number of players required for the board game.
-     *
      * @return the minimum number of players
      */
     public int getMinPlayers() {
@@ -58,7 +57,6 @@ public class BoardGame extends Toy {
 
     /**
      * Returns the maximum number of players allowed for the board game.
-     *
      * @return the maximum number of players
      */
     public int getMaxPlayers() {
@@ -67,7 +65,6 @@ public class BoardGame extends Toy {
 
     /**
      * Returns the designer or designers of the board game.
-     *
      * @return the designers of the board game
      */
     public String getDesigners() {
