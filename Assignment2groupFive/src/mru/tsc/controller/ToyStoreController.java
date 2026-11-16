@@ -10,6 +10,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 
+
+
+
 /**
  * Manages the inventory for the Toy Store Company.
  * Loads toy records from a file and stores Figure, Animal,
@@ -22,6 +25,10 @@ public class ToyStoreController {
      */
     private ArrayList<Toy> toys;
 
+    
+    
+    
+    
     /**
      * Constructs a ToyStoreController with an empty inventory.
      */
@@ -29,6 +36,9 @@ public class ToyStoreController {
         toys = new ArrayList<>();
     }
 
+    
+    
+    
     /**
      * Reads toy records from the toys.txt file and adds them
      * to the inventory.
@@ -194,6 +204,9 @@ public class ToyStoreController {
 
         return null;
     }
+    
+    
+    
 
     /**
      * Searches for toys containing the entered name.
@@ -479,6 +492,8 @@ public class ToyStoreController {
         }
     }
 
+    
+  
     
     
     

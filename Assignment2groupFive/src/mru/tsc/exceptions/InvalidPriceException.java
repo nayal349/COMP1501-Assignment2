@@ -7,6 +7,11 @@ package mru.tsc.exceptions;
 public class InvalidPriceException extends Exception {
 
     /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	/**
      * Creates an InvalidPriceException with an error message
      * @param message explains why the price is invalid
      */
