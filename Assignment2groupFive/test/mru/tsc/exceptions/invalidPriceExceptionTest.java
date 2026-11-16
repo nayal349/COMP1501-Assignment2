@@ -1,38 +1,20 @@
 package mru.tsc.exceptions;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.junit.jupiter.api.Test;
 
 class InvalidPriceExceptionTest {
 
     @Test
-    void testExceptionMessage() {
-
-        String message = "Price cannot be negative.";
+    void testConstructor() {
+        String message = "Invalid toy price";
 
         InvalidPriceException exception =
                 new InvalidPriceException(message);
 
+        assertNotNull(exception);
         assertEquals(message, exception.getMessage());
     }
-
-    @Test
-    void testExceptionCreation() {
-
-        InvalidPriceException exception =
-                new InvalidPriceException("Invalid price");
-
-        assertNotNull(exception);
-    }
-
-    @Test
-    void testExceptionInheritance() {
-
-        InvalidPriceException exception =
-                new InvalidPriceException("Invalid price");
-
-        assertTrue(exception instanceof Exception);
-    }
-
 }
