@@ -1,6 +1,6 @@
 package mru.tsc.application;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
@@ -8,9 +8,11 @@ class AppTest {
 
     @Test
     void testMain() {
-        String[] args = {};
 
-        assertDoesNotThrow(() -> App.main(args));
+        assertDoesNotThrow(() -> {
+            App.main(new String[] {});
+        });
+
     }
 
 }

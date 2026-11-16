@@ -1,31 +1,43 @@
-
 package mru.tsc.application;
 
-import mru.tsc.controller.*;
-import mru.tsc.view.*;
+import mru.tsc.controller.ToyStoreController;
+import mru.tsc.view.ToyStoreMenu;
 
 /**
  * Main application class for the Toy Store Company.
- * starts the program and connects the controller and view.
+ * Starts the program and connects the controller and view.
  */
 public class App {
 
     /**
-     * main method that starts the application.
+     * Main method that starts the application.
+     *
      * @param args command-line arguments
      */
     public static void main(String[] args) {
 
+        startApplication();
+
+    }
+
+    /**
+     * Initializes the controller, loads inventory,
+     * creates the menu, and starts the application.
+     */
+    public static void startApplication() {
+
         // Create the controller.
-        ToyStoreController t = new ToyStoreController();
+        ToyStoreController controller = new ToyStoreController();
 
         // Load the inventory.
-        t.loadInventory();
+        controller.loadInventory();
 
         // Create the menu and connect it to the controller.
-        ToyStoreMenu menu = new ToyStoreMenu(t);
+        ToyStoreMenu menu = new ToyStoreMenu(controller);
 
         // Start the application.
         menu.start();
+
     }
+
 }
