@@ -8,17 +8,31 @@ class InvalidPriceExceptionTest {
 
     @Test
     void testExceptionMessage() {
-        InvalidPriceException exception =
-                new InvalidPriceException("Price cannot be negative.");
 
-        assertEquals("Price cannot be negative.", exception.getMessage());
+        String message = "Price cannot be negative.";
+
+        InvalidPriceException exception =
+                new InvalidPriceException(message);
+
+        assertEquals(message, exception.getMessage());
     }
 
     @Test
-    void testExceptionIsThrown() {
-        assertThrows(InvalidPriceException.class, () -> {
-            throw new InvalidPriceException("Price cannot be negative.");
-        });
+    void testExceptionCreation() {
+
+        InvalidPriceException exception =
+                new InvalidPriceException("Invalid price");
+
+        assertNotNull(exception);
+    }
+
+    @Test
+    void testExceptionInheritance() {
+
+        InvalidPriceException exception =
+                new InvalidPriceException("Invalid price");
+
+        assertTrue(exception instanceof Exception);
     }
 
 }
