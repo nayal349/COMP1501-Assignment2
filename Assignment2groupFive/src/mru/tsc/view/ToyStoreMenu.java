@@ -9,7 +9,7 @@ import mru.tsc.exceptions.InvalidPriceException;
 import mru.tsc.exceptions.InvalidPlayersException;
 
 /**
- * Displays the menus for the Toy Store Company application.
+ * Shows the menus and handles user choices.
  */
 public class ToyStoreMenu {
 
@@ -17,17 +17,22 @@ public class ToyStoreMenu {
     private ToyStoreController controller;
 
     /**
-     * Creates a ToystoreMenu object.
-     * @param t the controller used by the menu
+     * Creates the menu.
+     * @param t the controller
      */
     public ToyStoreMenu(ToyStoreController t) {
         input = new Scanner(System.in);
         controller = t;
     }
 
+    
+    
+    
+    
+   
     /**
-     * Displays the main menu.
-     * @return the option selected by the user
+     * Shows the main menu.
+     * @return the option chosen by the user
      */
     public int displayMainMenu() {
 
@@ -56,9 +61,12 @@ public class ToyStoreMenu {
         return option;
     }
 
+    
+    
+    
     /**
-     * Displays the search menu.
-     * @return the search option selected
+     * Shows the search menu.
+     * @return the option chosen by the user
      */
     public int displaySearchMenu() {
 
@@ -82,9 +90,14 @@ public class ToyStoreMenu {
         return option;
     }
 
+    
+    
+    
+    
+    
     /**
-     * Displays the toy type menu.
-     * @return the selected toy type
+     * Shows the toy type menu.
+     * @return the type chosen by the user
      */
     public int displayTypeMenu() {
 
@@ -108,8 +121,11 @@ public class ToyStoreMenu {
         return type;
     }
 
+    
+    
+    
     /**
-     * Searches for a toy by serial number.
+     * Finds a toy using its serial number.
      */
     public void searchBySerialNumber() {
 
@@ -142,8 +158,13 @@ public class ToyStoreMenu {
         }
     }
 
+    
+    
+    
+    
+    
     /**
-     * Searches for toys by name.
+     * Finds toys using their names.
      */
     public void searchByName() {
 
@@ -166,8 +187,13 @@ public class ToyStoreMenu {
         }
     }
 
+    
+    
+    
+    
+    
     /**
-     * Searches for toys by type.
+     * Finds toys using their type.
      */
     public void searchByType() {
 
@@ -193,10 +219,13 @@ public class ToyStoreMenu {
         }
     }
 
+    
+    
+    
+    
     /**
-     * Displays toys found from a search.
-     *
-     * @param results the toys found
+     * Shows the toys found in a search.
+     * @param results the list of toys found
      */
     public void displayResults(ArrayList<Toy> results) {
 
@@ -211,10 +240,14 @@ public class ToyStoreMenu {
         }
     }
 
+    
+    
+    
+    
+    
     /**
-     * Lets the user select a toy to purchase.
-     *
-     * @param results search results
+     * Lets the user choose a toy to buy.
+     * @param results the list of toys found
      */
     public void selectToyToPurchase(ArrayList<Toy> results) {
 
@@ -258,10 +291,13 @@ public class ToyStoreMenu {
         completePurchase(toy);
     }
 
+    
+    
+    
+    
     /**
-     * Allows a single toy to be purchased.
-     *
-     * @param toy the toy found
+     * Lets the user buy a toy or go back.
+     * @param toy the toy selected
      */
     public void purchaseSingleToy(Toy toy) {
 
@@ -299,8 +335,13 @@ public class ToyStoreMenu {
         }
     }
 
+    
+    
+    
+    
+    
     /**
-     * Completes a toy purchase.
+     * Buys the selected toy.
      * @param toy the toy selected
      */
     public void completePurchase(Toy toy) {
@@ -319,14 +360,22 @@ public class ToyStoreMenu {
             System.out.println(
                     "\nSorry, this toy is currently out of stock.");
         }
-         input.nextLine();
 
-    System.out.print(
-            "Press Enter to Continue...");
+        input.nextLine();
 
-    input.nextLine();
+        System.out.print(
+                "Press Enter to Continue...");
+
+        input.nextLine();
     }
 
+    
+    
+    
+    
+    
+    
+    
     /**
      * Adds a new toy to the inventory.
      */
@@ -357,6 +406,12 @@ public class ToyStoreMenu {
             }
         }
 
+        
+        
+        
+        
+        
+        
         System.out.print("Enter Toy Name: ");
         String name = input.nextLine();
 
@@ -463,6 +518,9 @@ public class ToyStoreMenu {
 
             controller.addToy(figure);
 
+            
+            
+            
         } else if (firstDigit == '2'
                 || firstDigit == '3') {
 
@@ -609,10 +667,18 @@ public class ToyStoreMenu {
         input.nextLine();
     }
 
+    
+    
+    
+    
+    
+    
+    
+    
     /**
-     * Reads an integer that is zero or greater.
-     * @param message message displayed to user
-     * @return valid integer
+     * Reads a number that is zero or greater.
+     * @param message the message to show
+     * @return the valid number
      */
     private int readNonNegativeInteger(
             String message) {
@@ -644,10 +710,9 @@ public class ToyStoreMenu {
     }
 
     /**
-     * Reads an integer greater than zero.
-     *
-     * @param message message displayed to user
-     * @return valid positive integer
+     * Reads a number greater than zero.
+     * @param message the message to show
+     * @return the valid number
      */
     private int readPositiveInteger(
             String message) {
@@ -770,9 +835,13 @@ public class ToyStoreMenu {
         }
     }
 
+    
+    
+    
+    
+    
     /**
-     * Makes gift suggestions using optional age, type,
-     * and price range filters.
+     * Suggests toys using age, type, and price.
      */
     public void makeGiftSuggestion() {
 
@@ -981,8 +1050,13 @@ public class ToyStoreMenu {
         }
     }
 
+    
+    
+    
+    
+    
     /**
-     * Displays and handles the search menu.
+     * Shows the search menu and handles the user's choice.
      */
     public void searchInventory() {
 
@@ -1024,8 +1098,13 @@ public class ToyStoreMenu {
         }
     }
 
+    
+    
+    
+    
+    
     /**
-     * Starts the Toy Store application.
+     * Starts the application and shows the main menu.
      */
     public void start() {
 
