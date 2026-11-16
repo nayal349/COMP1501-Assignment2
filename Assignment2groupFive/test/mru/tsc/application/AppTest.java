@@ -1,4 +1,3 @@
-
 package mru.tsc.application;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
